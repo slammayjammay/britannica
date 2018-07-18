@@ -1,0 +1,22 @@
+{
+  "name": "britannica",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --progress --hide-modules",
+    "dev": "webpack --progress --hide-modules --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^2.5.16"
+  },
+  "devDependencies": {
+    "vue-loader": "^15.2.6",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.1.0"
+  }
+}
