@@ -1,9 +1,10 @@
 const { resolve } = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
 	mode: 'development',
-	entry: './src/index.js',
+	entry: './src/js/index.js',
 	output: {
 		path: resolve(__dirname, 'dist'),
 		filename: 'built.js'
@@ -19,6 +20,12 @@ module.exports = {
 				use: [
 					'vue-style-loader',
 					'css-loader',
+					{
+						loader: 'postcss-loader',
+						options: {
+							plugins: () => [autoprefixer()]
+						}
+					},
 					'sass-loader'
 				]
 			}

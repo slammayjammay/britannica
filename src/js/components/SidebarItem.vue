@@ -1,0 +1,89 @@
+<template>
+	<li class="sidebar-item" :class="sidebarClass">
+		<a ref="anchor" :href="`#${section.id}`" @click="onClick">{{ section.sidebarHeader || section.header }}</a>
+		<ul>
+			<sidebar-item
+			v-for="section in section.sections"
+			:level="level + 1"
+			:key="section.header"
+			:section="section"
+			@sidebar-item-click="onClick"
+			/>
+		</ul>
+	</li>
+</template>
+
+<script>
+import eventBus from '../utils/event-bus';
+
+export default {
+	name: 'sidebar-item',
+	props: {
+		level: { type: Number, default: 0 },
+		section: { type: Object }
+	},
+	data() {
+		return {
+			active: false
+		};
+	},
+	computed: {
+		sidebarClass() {
+			const classes = [];
+
+			classes.push(`sidebar-item-level-${this.level}`);
+
+			if (this.active) {
+				classes.push('active');
+			}
+
+			return classes.join(' ');
+		}
+	},
+	methods: {
+		onClick(e) {
+			e.preventDefault();
+			eventBus.$emit('sidebar-item-click', this, this.$refs.anchor);
+		},
+
+		setActive() {
+			this.active = true;
+		},
+
+		setInactive() {
+			this.active = false;
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+li.sidebar-item {
+	list-style-type: none;
+
+	&-level-0:last-child .sidebar-item:last-child {
+		padding-bottom: 3em;
+	}
+
+	a {
+		display: block;
+		padding: 5px;
+		text-decoration: none;
+		color: #126596;
+
+		&:hover {
+			background: #e6e6e6;
+		}
+	}
+
+	&.active > a {
+		background: #999;
+		color: white;
+	}
+
+	ul {
+		padding-left: 20px;
+		margin: 0;
+	}
+}
+</style>

@@ -14,8 +14,10 @@
     "vue": "^2.5.16"
   },
   "devDependencies": {
+    "autoprefixer": "^9.0.0",
     "css-loader": "^1.0.0",
     "node-sass": "^4.9.2",
+    "postcss-loader": "^2.1.6",
     "sass-loader": "^7.0.3",
     "vue-loader": "^15.2.6",
     "vue-template-compiler": "^2.5.16",
