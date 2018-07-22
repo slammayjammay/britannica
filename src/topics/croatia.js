@@ -1,4 +1,90 @@
 export default {
+	facts: [
+		{
+			header: `Official name`,
+			paragraphs: [`Republika Hrvatska (Republic of Croatia)`]
+		},
+		{
+			header: `Form of government`,
+			paragraphs: [`multiparty republic with one legislative house (Croatian Parliament [151])`]
+		},
+		{
+			header: `Head of state`,
+			paragraphs: [`President: Kolinda Grabar-Kitarović`]
+		},
+		{
+			header: `Head of government`,
+			paragraphs: [`Prime Minister: Andrej Plenković`]
+		},
+		{
+			header: `Capital`,
+			paragraphs: [`Zagreb`]
+		},
+		{
+			header: `Official language`,
+			paragraphs: [`Croatian`]
+		},
+		{
+			header: `Official religion`,
+			paragraphs: [`none`]
+		},
+		{
+			header: `Monetary unit`,
+			paragraphs: [`kuna (kn; plural kune)`]
+		},
+		{
+			header: `Currency exchange rate`,
+			paragraphs: [`1 USD equals 6.349 Croatian kuna`]
+		},
+		{
+			header: `Population`,
+			paragraphs: [`(2017 est.) 4,139,000`]
+		},
+		{
+			header: `Population rank`,
+			paragraphs: [`(2017) 128`]
+		},
+		{
+			header: `Population projection 2030`,
+			paragraphs: [`2,878,000`]
+		},
+		{
+			header: `Total area (sq mi)`,
+			paragraphs: [`12,851`]
+		},
+		{
+			header: `Total area (sq mi)`,
+			paragraphs: [`56,594`]
+		},
+		{
+			header: `Density: persons per sq mi`,
+			paragraphs: [`(2017) 189.4`]
+		},
+		{
+			header: `Density: persons per sq km`,
+			paragraphs: [`(2017) 73.1`]
+		},
+		{
+			header: `Urban-rural population`,
+			paragraphs: [`Urban: (2015) 59%`, `Rural: (2015) 41%`]
+		},
+		{
+			header: `Life expectancy at birth`,
+			paragraphs: [`Male: (2015) 73 years`, `Female: (2015) 80.4 years`]
+		},
+		{
+			header: `Literacy: percentage of population age 15 and over literate`,
+			paragraphs: [`Male: (2010) 99.5%`, `Female: (2010) 98.2%`]
+		},
+		{
+			header: `GNI (U.S.$ '000,000)`,
+			paragraphs: [`(2016) 50,491`]
+		},
+		{
+			header: `GNI per capita (U.S.$)`,
+			paragraphs: [`(2016) 12,110`]
+		}
+	],
 	intro: {
 		header: 'Croatia',
 		sidebarHeader: 'Introduction & Quick Facts',

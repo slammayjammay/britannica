@@ -13,7 +13,7 @@
 				:level="1"
 			></topic-block>
 		</div>
-		<main-content-sidebar></main-content-sidebar>
+		<main-content-sidebar :topic="topic"></main-content-sidebar>
 	</div>
 </template>
 
@@ -43,13 +43,17 @@ export default {
 
 			const blocks = [].slice.call(this.$refs.content.querySelectorAll('.topic-block:not(:first-child)'));
 			this.offsets = blocks.map(el => el.offsetTop - 146);
-			this.currentScrollIdx = this._getScrollIdx(this.scrollY);
+			this.currentScrollIdx = this._getScrollIdx(this.scrollY, -1);
 			eventBus.$emit('scroll-active-block', this.currentScrollIdx);
 
 			eventBus.$on('scroll', this._onScroll);
 		},
 
-		_onScroll() {
+		_onScroll(options = {}) {
+			if (options.smoothscroll) {
+				return;
+			}
+
 			if (this.scrollDir < 0 && this.scrollY < this.offsets[this.currentScrollIdx - 1]) {
 				this.currentScrollIdx = this._getScrollIdx(this.scrollY, this.currentScrollIdx - 1, -1);
 				eventBus.$emit('scroll-active-block', this.currentScrollIdx);
@@ -92,9 +96,9 @@ export default {
 
 .main-content {
 	display: flex;
+	margin-top: $header-height;
 
 	.content {
-		margin-top: $header-height;
 		flex-grow: 1;
 		padding: 30px;
 	}

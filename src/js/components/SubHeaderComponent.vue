@@ -3,12 +3,15 @@
 		<div class="sidebar-header sidebar-width subheader-color">Contents</div>
 		<div class="main-content-header main-content-width subheader-color">
 			<h1>{{ topic.intro.header }}</h1>
-			<div class="scroll-indicator" :style="scrollIndicatorStyle"></div>
+			<div class="scroll-indicator" ref="scrollIndicator"></div>
 		</div>
 	</div>
 </template>
 
 <script>
+import TweenLite from 'gsap';
+import eventBus from '../utils/event-bus';
+
 export default {
 	props: ['scrollY', 'topic'],
 	data() {
@@ -18,19 +21,26 @@ export default {
 	},
 	mounted() {
 		this._onResize = this._onResize.bind(this);
+		this._onScroll = this._onScroll.bind(this);
 
-		this._resize();
-
-		window.addEventListener('resize', this._onResize);
-	},
-	computed: {
-		scrollIndicatorStyle() {
-			return {
-				width: `${this.scrollY / this.scrollingDistance * 100}%`
-			};
-		}
+		eventBus.$on('scroll', this._onScroll);
+		eventBus.$on('resize', this._onResize);
+		eventBus.$on('app-init', () => {
+			this._resize();
+			this._updateScrollIndicator();
+		});
 	},
 	methods: {
+		_updateScrollIndicator() {
+			TweenLite.to(this.$refs.scrollIndicator, 0.25, {
+				width: `${this.scrollY / this.scrollingDistance * 100}%`
+			});
+		},
+
+		_onScroll() {
+			this._updateScrollIndicator();
+		},
+
 		_onResize() {
 			this._resize();
 		},
@@ -69,7 +79,6 @@ $border-color: #ccc;
 			$height: 3px;
 
 			width: 0%;
-			transition: 100ms;
 			position: absolute;
 			left: 0;
 			bottom: -$height;

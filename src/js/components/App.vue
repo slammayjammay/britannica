@@ -47,14 +47,13 @@ export default {
 	methods: {
 		_onResize() {
 			this.scrollY = window.scrollY;
+			eventBus.$emit('resize');
 		},
 
 		_onScroll() {
 			this.scrollY = window.scrollY;
 
-			if (!this._isSmoothScrolling) {
-				eventBus.$emit('scroll');
-			}
+			eventBus.$emit('scroll', { smoothscroll: this._isSmoothScrolling });
 		}
 	}
 }
