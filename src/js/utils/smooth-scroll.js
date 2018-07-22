@@ -25,23 +25,27 @@ export default (id, options = {}) => {
 		return;
 	}
 
+	const dir = (targetY > currentY) ? 1 : -1;
+
 	const startTime = new Date();
 	let timeoutId;
 
 	function scroll() {
 		const elapsedTime = new Date() - startTime;
 		const scrollPos = easeInOutCubic(elapsedTime, currentY, targetY - currentY, options.duration * 1000);
+
+		if ((dir > 0 && scrollPos > targetY) || (dir < 0 && scrollPos < targetY)) {
+			cancelAnimationFrame(timeoutId);
+			eventBus.$emit('smoothscroll-end')
+			return;
+		}
+
 		window.scrollTo(0, scrollPos);
 		timeoutId = requestAnimationFrame(scroll);
 	}
 
 	eventBus.$emit('smoothscroll-begin');
 	scroll();
-
-	setTimeout(() => {
-		cancelAnimationFrame(timeoutId);
-		eventBus.$emit('smoothscroll-end')
-	}, options.duration * 1000);
 };
 
 function easeInOutCubic(time, begin, change, duration) {
