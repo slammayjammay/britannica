@@ -43,6 +43,7 @@ export default {
 
 		_onResize() {
 			this._resize();
+			this._updateScrollIndicator();
 		},
 
 		_resize() {
