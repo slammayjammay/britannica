@@ -39,7 +39,10 @@ export default {
 		window.addEventListener('resize', this._onResize);
 		window.addEventListener('scroll', this._onScroll);
 
-		this.$nextTick(() => eventBus.$emit('app-init'));
+		window.addEventListener('load', () => {
+			// need to wait a tick when deeplinking on load
+			requestAnimationFrame(() => eventBus.$emit('app-init'));
+		});
 	},
 	methods: {
 		_onResize() {
