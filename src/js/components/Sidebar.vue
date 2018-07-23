@@ -1,5 +1,5 @@
 <template>
-	<div class="sidebar sidebar-width subheader-color">
+	<div class="sidebar sidebar-width subheader-color" :class="sidebarClass">
 		<ul>
 			<sidebar-item :section="topic.intro" @sidebar-item-click="_onSidebarItemClick"/>
 			<sidebar-item
@@ -22,6 +22,18 @@ export default {
 	components: {
 		SidebarItem
 	},
+	data() {
+		return {
+			isCollapsed: false
+		};
+	},
+	computed: {
+		sidebarClass() {
+			return {
+				'collapsed': this.isCollapsed
+			};
+		}
+	},
 	mounted() {
 		this._onSidebarItemClick = this._onSidebarItemClick.bind(this);
 		this._onActiveBlock = this._onActiveBlock.bind(this);
@@ -37,6 +49,8 @@ export default {
 
 		eventBus.$on('sidebar-item-click', this._onSidebarItemClick);
 		eventBus.$on('scroll-active-block', this._onActiveBlock);
+		eventBus.$on('sidebar-collapse', () => this.isCollapsed = true);
+		eventBus.$on('sidebar-open', () => this.isCollapsed = false);
 	},
 	methods: {
 		_onSidebarItemClick(child, anchorTag) {
@@ -68,6 +82,10 @@ export default {
 
 .sidebar {
 	height: 100%;
+
+	&.collapsed {
+		display: none;
+	}
 
 	ul {
 		height: calc(100% - #{$header-height});

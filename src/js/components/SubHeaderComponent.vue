@@ -1,8 +1,11 @@
 <template>
 	<div class="subheader" :class="subheaderClass">
-		<div class="sidebar-header sidebar-width subheader-color">Contents</div>
+		<div class="sidebar-header sidebar-width subheader-color">
+			<button class="sidebar-collapse-button" ref="sidebarCollapseButton">&times;</button>
+		</div>
 		<div class="main-content-header main-content-width subheader-color">
-			<h1>{{ topic.intro.header }}</h1>
+			<button class="sidebar-open-button" ref="sidebarOpenButton">+</button>
+			<h1 class="h1">{{ topic.intro.header }}</h1>
 			<div class="scroll-indicator" ref="scrollIndicator"></div>
 		</div>
 	</div>
@@ -17,24 +20,33 @@ export default {
 	data() {
 		return {
 			scrollingDistance: 0,
-			isFinishedScrolling: false
+			isFinishedScrolling: false,
+			isCollapsed: false
 		};
 	},
 	computed: {
 		subheaderClass() {
-			return this.isFinishedScrolling ? 'finished-scrolling' : '';
+			return {
+				'finished-scrolling' : this.isFinishedScrolling,
+				'collapsed' : this.isCollapsed
+			};
 		}
 	},
 	mounted() {
 		this._onResize = this._onResize.bind(this);
 		this._onScroll = this._onScroll.bind(this);
 
-		eventBus.$on('scroll', this._onScroll);
-		eventBus.$on('resize', this._onResize);
+		this.$refs.sidebarCollapseButton.addEventListener('click', () => eventBus.$emit('sidebar-collapse'));
+		this.$refs.sidebarOpenButton.addEventListener('click', () => eventBus.$emit('sidebar-open'));
+
 		eventBus.$on('app-init', () => {
 			this._resize();
 			this._updateScrollIndicator();
 		});
+		eventBus.$on('scroll', this._onScroll);
+		eventBus.$on('resize', this._onResize);
+		eventBus.$on('sidebar-collapse', () => this.isCollapsed = true);
+		eventBus.$on('sidebar-open', () => this.isCollapsed = false);
 	},
 	methods: {
 		_updateScrollIndicator() {
@@ -72,6 +84,15 @@ export default {
 <style lang="scss" scoped>
 $border-color: #ccc;
 
+button {
+	border: none;
+	background: initial;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
 .subheader {
 	position: sticky;
 	top: 0;
@@ -82,11 +103,24 @@ $border-color: #ccc;
 		border-bottom: 1px solid $border-color;
 		border-right: 1px solid $border-color;
 		box-sizing: border-box;
+
+		.sidebar-collapse-button {
+			padding: 10px;
+			font-size: 20px;
+		}
 	}
 
 	.main-content-header {
 		border-bottom: 1px solid $border-color;
 		position: relative;
+
+		.sidebar-open-button {
+			display: none;
+		}
+
+		.h1 {
+			display: inline-block;
+		}
 
 		.scroll-indicator {
 			$height: 3px;
@@ -105,6 +139,16 @@ $border-color: #ccc;
 .subheader.finished-scrolling {
 	.scroll-indicator {
 		background: #76a307;
+	}
+}
+
+.subheader.collapsed {
+	.sidebar-header {
+		display: none;
+	}
+
+	.sidebar-open-button {
+		display: inline-block;
 	}
 }
 </style>
