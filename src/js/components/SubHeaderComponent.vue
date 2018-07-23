@@ -1,5 +1,5 @@
 <template>
-	<div class="subheader">
+	<div class="subheader" :class="subheaderClass">
 		<div class="sidebar-header sidebar-width subheader-color">Contents</div>
 		<div class="main-content-header main-content-width subheader-color">
 			<h1>{{ topic.intro.header }}</h1>
@@ -16,8 +16,14 @@ export default {
 	props: ['scrollY', 'topic'],
 	data() {
 		return {
-			scrollingDistance: 0
+			scrollingDistance: 0,
+			isFinishedScrolling: false
 		};
+	},
+	computed: {
+		subheaderClass() {
+			return this.isFinishedScrolling ? 'finished-scrolling' : '';
+		}
 	},
 	mounted() {
 		this._onResize = this._onResize.bind(this);
@@ -32,9 +38,13 @@ export default {
 	},
 	methods: {
 		_updateScrollIndicator() {
+			const widthPercentage = Math.min(1, this.scrollY / this.scrollingDistance);
+
 			TweenLite.to(this.$refs.scrollIndicator, 0.25, {
-				width: `${this.scrollY / this.scrollingDistance * 100}%`
+				width: `${widthPercentage * 100}%`
 			});
+
+			this.isFinishedScrolling = (widthPercentage === 1);
 		},
 
 		async _onScroll() {
@@ -81,13 +91,20 @@ $border-color: #ccc;
 		.scroll-indicator {
 			$height: 3px;
 
+			background: #084465;
+			transition: background-color 0.25s;
 			width: 0%;
 			position: absolute;
 			left: 0;
 			bottom: -$height;
 			height: $height;
-			background: #084465;
 		}
+	}
+}
+
+.subheader.finished-scrolling {
+	.scroll-indicator {
+		background: #76a307;
 	}
 }
 </style>
