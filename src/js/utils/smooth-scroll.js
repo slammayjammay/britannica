@@ -42,7 +42,6 @@ export default (id, options = {}) => {
 
 		if (scrollPos === targetY) {
 			cancelAnimationFrame(timeoutId);
-			console.log(scrollPos);
 			eventBus.$emit('smoothscroll-end')
 		} else {
 			timeoutId = requestAnimationFrame(scroll);
