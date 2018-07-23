@@ -52,7 +52,6 @@ export default {
 
 		_onScroll() {
 			this.scrollY = window.scrollY;
-
 			eventBus.$emit('scroll', { smoothscroll: this._isSmoothScrolling });
 		}
 	}
@@ -62,10 +61,6 @@ export default {
 <style lang="scss">
 $sidebar-width: 300px;
 $subheader-color: #f2f2f2;
-
-html {
-	height: 100%;
-}
 
 html, body {
 	margin: 0;

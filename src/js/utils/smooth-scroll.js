@@ -19,7 +19,10 @@ export default (id, options = {}) => {
 	el.setAttribute('id', id);
 
 	const currentY = window.scrollY;
-	const targetY = currentY + el.getBoundingClientRect().top - options.offsetFromTop;
+
+	let targetY = currentY + el.getBoundingClientRect().top - options.offsetFromTop;
+	targetY = Math.max(0, targetY);
+	targetY = Math.min(document.body.offsetHeight - window.innerHeight, targetY);
 
 	if (currentY === targetY) {
 		return;

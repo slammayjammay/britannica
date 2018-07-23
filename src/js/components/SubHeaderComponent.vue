@@ -37,11 +37,13 @@ export default {
 			});
 		},
 
-		_onScroll() {
+		async _onScroll() {
+			await new Promise(resolve => requestAnimationFrame(resolve));
 			this._updateScrollIndicator();
 		},
 
-		_onResize() {
+		async _onResize() {
+			await new Promise(resolve => requestAnimationFrame(resolve));
 			this._resize();
 			this._updateScrollIndicator();
 		},

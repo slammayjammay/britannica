@@ -49,10 +49,12 @@ export default {
 			eventBus.$on('scroll', this._onScroll);
 		},
 
-		_onScroll(options = {}) {
+		async _onScroll(options = {}) {
 			if (options.smoothscroll) {
 				return;
 			}
+
+			await new Promise(resolve => requestAnimationFrame(resolve));
 
 			if (this.scrollDir < 0 && this.scrollY < this.offsets[this.currentScrollIdx - 1]) {
 				this.currentScrollIdx = this._getScrollIdx(this.scrollY, this.currentScrollIdx - 1, -1);
