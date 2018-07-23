@@ -20,7 +20,7 @@ export default (id, options = {}) => {
 
 	const currentY = window.scrollY;
 
-	let targetY = currentY + el.getBoundingClientRect().top - options.offsetFromTop;
+	let targetY = ~~(currentY + el.getBoundingClientRect().top - options.offsetFromTop);
 	targetY = Math.max(0, targetY);
 	targetY = Math.min(document.body.offsetHeight - window.innerHeight, targetY);
 
@@ -33,27 +33,26 @@ export default (id, options = {}) => {
 	const startTime = new Date();
 	let timeoutId;
 
-	function scroll() {
-		const elapsedTime = new Date() - startTime;
-		const scrollPos = easeInOutCubic(elapsedTime, currentY, targetY - currentY, options.duration * 1000);
+	function scroll(a) {
+		const elapsedTime = Math.min(1, (new Date() - startTime) / (options.duration * 1000));
+		const currentVal = easeInOutCubic(elapsedTime);
 
-		if ((dir > 0 && scrollPos > targetY) || (dir < 0 && scrollPos < targetY)) {
-			cancelAnimationFrame(timeoutId);
-			eventBus.$emit('smoothscroll-end')
-			return;
-		}
-
+		const scrollPos = currentY + (targetY - currentY) * currentVal;
 		window.scrollTo(0, scrollPos);
-		timeoutId = requestAnimationFrame(scroll);
+
+		if (scrollPos === targetY) {
+			cancelAnimationFrame(timeoutId);
+			console.log(scrollPos);
+			eventBus.$emit('smoothscroll-end')
+		} else {
+			timeoutId = requestAnimationFrame(scroll);
+		}
 	}
 
 	eventBus.$emit('smoothscroll-begin');
 	scroll();
 };
 
-function easeInOutCubic(time, begin, change, duration) {
-	if ((time /= duration / 2) < 1) {
-		return change / 2 * time * time * time + begin;
-	}
-	return change / 2 * ((time -= 2) * time * time + 2) + begin;
-};
+function easeInOutCubic(t) {
+	return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+}
