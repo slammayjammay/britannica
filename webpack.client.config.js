@@ -4,10 +4,11 @@ const autoprefixer = require('autoprefixer');
 
 module.exports = {
 	mode: 'development',
-	entry: './src/js/index.js',
+	entry: './src/entry-client.js',
 	output: {
 		path: resolve(__dirname, 'dist'),
-		filename: 'built.js'
+		filename: 'built.js',
+		publicPath: '/dist'
 	},
 	plugins: [
 		new VueLoaderPlugin()
@@ -31,4 +32,4 @@ module.exports = {
 			}
 		]
 	}
-}
+};
