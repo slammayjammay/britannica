@@ -1,28 +1,23 @@
 <template>
 	<div class="sticky-component">
-		<!-- <div class="header" :class="headerClass">
-			<div class="sticky-inner"> -->
+		<div class="header-top">
+			<div class="header-title-row">Encyclopadia Britannica</div>
+			<hr />
+			<div class="header-menu-row">
+				<template v-for="(menuItem, idx) in menuItems">
+					<span class="header-menu-item">
+						<a :href="menuItem.href" class="header-menu-link" :class="`header-menu-link-${menuItem.copy}`">{{ menuItem.copy }}</a>
+					</span>
+					<span v-if="idx < menuItems.length - 1" class="header-menu-item header-menu-spacer">•</span>
+				</template>
+			</div>
+		</div>
 
-				<div class="header-top">
-					<div class="header-title-row">Encyclopadia Britannica</div>
-					<hr />
-					<div class="header-menu-row">
-						<template v-for="(menuItem, idx) in menuItems">
-							<span class="header-menu-item">
-								<a :href="menuItem.href" class="header-menu-link" :class="`header-menu-link-${menuItem.copy}`">{{ menuItem.copy }}</a>
-							</span>
-							<span v-if="idx < menuItems.length - 1" class="header-menu-item header-menu-spacer">•</span>
-						</template>
-					</div>
-				</div>
+		<div class="header-bottom">
+			<subheader-component :scrollY="scrollY" :topic="topic"></subheader-component>
+		</div>
 
-				<div class="header-bottom">
-					<subheader-component :scrollY="scrollY" :topic="topic"></subheader-component>
-				</div>
-
-				<sidebar :scrollY="scrollY" :topic="topic"/>
-			<!-- </div>
-		</div> -->
+		<sidebar :scrollY="scrollY" :topic="topic"/>
 	</div>
 </template>
 

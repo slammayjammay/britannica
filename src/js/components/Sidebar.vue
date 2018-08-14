@@ -1,10 +1,14 @@
 <template>
 	<div class="sidebar sidebar-width subheader-color" :class="sidebarClass">
 		<ul>
-			<sidebar-item :section="topic.intro" @sidebar-item-click="_onSidebarItemClick"/>
+			<sidebar-item
+				:section="topic.intro"
+				@sidebar-item-click="_onSidebarItemClick"
+			/>
+
 			<sidebar-item
 				v-for="section in topic.sections"
-				:key="section.header"
+				:key="section.id"
 				:section="section"
 				@sidebar-item-click="_onSidebarItemClick"
 			/>
@@ -39,10 +43,10 @@ export default {
 		this._onActiveBlock = this._onActiveBlock.bind(this);
 
 		this.activeItem = null;
-		this.children = [];
+		this.sidebarItems = [];
 
 		const pushChildren = (child) => {
-			this.children.push(child);
+			this.sidebarItems.push(child);
 			child.$children.forEach(pushChildren);
 		};
 		this.$children.forEach(pushChildren);
@@ -70,7 +74,7 @@ export default {
 				this.activeItem.setInactive()
 			}
 
-			this.activeItem = this.children[idx];
+			this.activeItem = this.sidebarItems[idx];
 			this.activeItem.setActive();
 		}
 	}

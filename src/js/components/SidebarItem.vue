@@ -1,13 +1,13 @@
 <template>
 	<li class="sidebar-item" :class="sidebarClass">
-		<a ref="anchor" :href="`#${section.id}`" @click="onClick">{{ section.sidebarHeader || section.header }}</a>
+		<a ref="anchor" :href="`#${section.id}`" @click="onClick">{{ section.sidebarHeader }}</a>
 		<ul>
 			<sidebar-item
-			v-for="section in section.sections"
-			:level="level + 1"
-			:key="section.header"
-			:section="section"
-			@sidebar-item-click="onClick"
+				v-for="section in section.sections"
+				:key="section.id"
+				:level="level + 1"
+				:section="section"
+				@sidebar-item-click="onClick"
 			/>
 		</ul>
 	</li>

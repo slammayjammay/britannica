@@ -39,14 +39,13 @@ export default {
 		this.$refs.sidebarCollapseButton.addEventListener('click', () => eventBus.$emit('sidebar-collapse'));
 		this.$refs.sidebarOpenButton.addEventListener('click', () => eventBus.$emit('sidebar-open'));
 
-		eventBus.$on('app-init', () => {
-			this._resize();
-			this._updateScrollIndicator();
-		});
 		eventBus.$on('scroll', this._onScroll);
 		eventBus.$on('resize', this._onResize);
 		eventBus.$on('sidebar-collapse', () => this.isCollapsed = true);
 		eventBus.$on('sidebar-open', () => this.isCollapsed = false);
+
+		this._resize();
+		this._updateScrollIndicator();
 	},
 	methods: {
 		_updateScrollIndicator() {

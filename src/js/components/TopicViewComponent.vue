@@ -1,0 +1,119 @@
+<template>
+	<div class="topic-view" :class="klass">
+		<template v-if="ready">
+			<sticky-component :scrollY="scrollY" :topic="topic"></sticky-component>
+
+			<div class="flex">
+				<div class="sidebar-placeholder sidebar-width"></div>
+				<main-content :scrollY="scrollY" :topic="topic"/>
+			</div>
+		</template>
+	</div>
+</template>
+
+<script>
+import StickyComponent from './StickyComponent.vue';
+import MainContent from './MainContent.vue';
+import Structure from '../utils/Structure';
+import eventBus from '../utils/event-bus';
+
+export default {
+	components: {
+		StickyComponent,
+		MainContent
+	},
+	props: ['scrollY'],
+	data() {
+		return {
+			ready: false,
+			topic: null,
+			isCollapsed: false,
+			topic: []
+		};
+	},
+	computed: {
+		klass() {
+			return {
+				'collapsed': this.isCollapsed
+			}
+		}
+	},
+	async mounted() {
+		const { category, topic } = this.$route.params;
+
+		await new Promise(resolve => {
+			this.fetch(`/${category}/${topic}`, { scrapeStructure: true })
+			.catch(error => console.log(error))
+			.then(response => response.json())
+			.then(structure => {
+				this.structure = new Structure(structure.intro, structure.sections);
+				resolve();
+			});
+		});
+
+		const nextUrl = await new Promise(resolve => {
+			this.fetch(`/${category}/${topic}`)
+			.catch(error => console.log(error))
+			.then(response => response.json())
+			.then(data => {
+				if (data.intro) {
+					this.structure.fillIntro(data.intro);
+				}
+
+				this.structure.fill(data.sections);
+
+				this.topic = {
+					intro: this.structure.intro,
+					sections: this.structure.tree.sections
+				};
+
+				resolve(data.nextUrl);
+			});
+		});
+
+		this.ready = true;
+
+		if (nextUrl) {
+			this.continuouslyFill(nextUrl);
+		}
+	},
+	methods: {
+		fetch(url, body) {
+			return fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				},
+				body: body ? JSON.stringify(body) : null
+			});
+		},
+
+		continuouslyFill(nextUrl) {
+			this.fetch(nextUrl)
+			.catch(error => console.log(error))
+			.then(response => response.json())
+			.then(data => {
+				this.structure.fill(data.sections);
+
+				this.$nextTick(() => {
+					eventBus.$emit('resize');
+					eventBus.$emit('blocks-fetched');
+				});
+
+				if (data.nextUrl) {
+					this.continuouslyFill(data.nextUrl);
+				}
+			});
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+.collapsed {
+	.sidebar-placeholder {
+		display: none;
+	}
+}
+</style>

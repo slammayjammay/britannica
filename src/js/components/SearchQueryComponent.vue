@@ -1,42 +1,62 @@
 <template>
 	<div class="search-query">
-		<form ref="form">
-			<label>Search query:</label>
-			<input type="text" ref="input"></input>
+		<form action="/search" method="POST" ref="form">
+			<label for="search-query">Search query:</label>
+			<input id="search-query" name="search-query" type="text" ref="input"></input>
 			<input type="submit"></input>
 		</form>
+
+		<div v-if="searchResults !== null">
+			<h2>Showing results for "{{ searchQuery }}"</h2>
+			<ul>
+				<li tag="li" v-for="result in searchResults.results">
+					<router-link :to="result.url">{{ result.title }}</router-link>
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 
 <script>
 export default {
+	data() {
+		return {
+			searchQuery: null,
+			searchResults: null
+		};
+	},
 	async mounted() {
-		const query = await this._promptForSearchQuery();
+		this._onInputSubmit = this._onInputSubmit.bind(this);
+
+		this.$refs.form.addEventListener('submit', this._onInputSubmit);
 	},
 	methods: {
-		_promptForSearchQuery() {
-			return new Promise(resolve => {
-				this.$refs.form.addEventListener('submit', e => {
-					// e.preventDefault();
-					// resolve(this.$refs.input.value);
-				});
+		_onInputSubmit(e) {
+			e.preventDefault();
+
+			const query = this.$refs.input.value;
+
+			const fetched = fetch('/search', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				},
+				body: JSON.stringify({
+					'search-query': query
+				})
+			});
+
+			fetched.then(results => {
+				results.json().then(results => this._updateResults(query, results));
+			}).catch(error => {
+				console.log(error);
 			});
 		},
 
-		_fetchSearchQuery(query) {
-			return new Promise(resolve => {
-				// request.get(SEARCH_URL, (error, res, body) => {
-				// 	if (error) {
-				// 		return resolve({ error });
-				// 	}
-				//
-				// 	if (res.statusCode !== 200) {
-				// 		return resolve({ error: new Error(`Status code: ${res.statusCode}`) });
-				// 	}
-				//
-				// 	resolve({ body });
-				// });
-			});
+		_updateResults(query, results) {
+			this.searchQuery = query;
+			this.searchResults = results;
 		}
 	}
 };

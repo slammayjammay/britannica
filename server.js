@@ -1,9 +1,10 @@
-const { join } = require('path');
 const { readFileSync } = require('fs');
+const { join } = require('path');
 const express = require('express');
-const Vue = require('vue');
+const bodyParser = require('body-parser');
 const { createRenderer, createBundleRenderer } = require('vue-server-renderer');
 const createDevServer = require('./create-dev-server');
+const BritannicaScraper = require('./src/BritannicaScraper');
 
 const server = express();
 const PORT = 8080;
@@ -25,19 +26,78 @@ if (process.env.NODE_ENV === 'development') {
 	});
 }
 
+server.set('view engine', 'ejs');
 server.use('/dist', express.static('dist'));
+server.use(bodyParser.json());
 
-server.get('/', (req, res) => {
-	const context = {};
+server.post('/search', async (req, res) => {
+	const params = req.body;
+	const queryString = params['search-query'];
+
+	try {
+		const scraper = new BritannicaScraper();
+		const { error, data } = await scraper.search(queryString);
+
+		if (error) {
+			console.log(error);
+			return res.end(error.message);
+		}
+
+		res.json(data);
+	} catch (e) {
+		res.status(500).end('Internal server error.');
+		console.log(e);
+	}
+});
+
+const postRoutes = ['/:category/:topic', '/:category/:topic/:subpage'];
+
+server.post(postRoutes, async (req, res) => {
+	const { category, topic, subpage } = req.params;
+
+	try {
+		const scraper = new BritannicaScraper();
+
+		let promise;
+
+		if (req.body.scrapeStructure) {
+			promise = scraper.scrapeTopicStructure(category, topic, subpage);
+		} else {
+			promise = scraper.scrapeTopicData(category, topic, subpage);
+		}
+
+		const { error, data } = await promise;
+
+		if (error) {
+			console.log(error);
+			return res.end(error.message);
+		}
+
+		res.json(data);
+	} catch (e) {
+		res.status(500).end('Internal server error.');
+		console.log(e);
+	}
+});
+
+server.get('*', (req, res) => {
+	const context = { url: req.url };
 
 	renderer.renderToString(context, (err, html) => {
 		if (err) {
-			res.end(err);
-		} else {
-			res.end(html);
+			console.log(err);
+
+			if (err.code === 404) {
+				return res.status(404).end('Page not found.');
+			} else {
+				return res.status(500).end('Internal server error.');
+			}
 		}
+
+		res.end(html);
 	});
 });
+
 
 server.listen(PORT);
 console.log(`Serving on port ${PORT}`);

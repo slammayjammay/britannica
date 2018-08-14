@@ -1,13 +1,14 @@
 <template>
 	<div class="main-content">
 		<div class="content" ref="content">
-			<topic-block :topic="topic.intro">
+			<topic-block :topic="topic.intro" class="topic-block-intro">
 				<p>WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
 				<p>LAST UPDATED: {{ topic.intro.lastUpdated }}</p>
 			</topic-block>
 
 			<topic-block
 				v-for="section in topic.sections"
+				v-if="section.isFilled"
 				:key="section.header"
 				:topic="section"
 				:level="1"
@@ -29,24 +30,37 @@ export default {
 		TopicBlock
 	},
 	mounted() {
-		this._init = this._init.bind(this);
+		this.init = this.init.bind(this);
 		this._onScroll = this._onScroll.bind(this);
 
-		eventBus.$on('app-init', this._init);
+		this.init();
+
+		this.offsets = this._calculateOffsets();
+		this.currentScrollIdx = this._getScrollIdx(this.scrollY, -1);
+		eventBus.$emit('scroll-active-block', this.currentScrollIdx);
+
+		eventBus.$on('blocks-fetched', () => {
+			this.offsets = this._calculateOffsets();
+			this.currentScrollIdx = this._getScrollIdx(this.scrollY, -1);
+			eventBus.$emit('scroll-active-block', this.currentScrollIdx);
+		});
 	},
 	methods: {
-		_init() {
+		init() {
 			this.lastScrollY = this.scrollY;
 			this.scrollDir = 0;
 			this.offsets = [];
 			this.currentScrollIdx = null;
 
-			const blocks = [].slice.call(this.$refs.content.querySelectorAll('.topic-block:not(:first-child)'));
-			this.offsets = blocks.map(el => el.offsetTop - 146);
-			this.currentScrollIdx = this._getScrollIdx(this.scrollY, -1);
-			eventBus.$emit('scroll-active-block', this.currentScrollIdx);
-
 			eventBus.$on('scroll', this._onScroll);
+		},
+
+		_calculateOffsets() {
+			const blocks = [].slice.call(
+				this.$refs.content.querySelectorAll('.topic-block:not(.topic-block-intro)')
+			);
+
+			return blocks.map(el => el.offsetTop - 146);
 		},
 
 		async _onScroll(options = {}) {
@@ -54,7 +68,7 @@ export default {
 				return;
 			}
 
-			await new Promise(resolve => requestAnimationFrame(resolve));
+			await new Promise(resolve => this.$nextTick(resolve));
 
 			if (this.scrollDir < 0 && this.scrollY < this.offsets[this.currentScrollIdx - 1]) {
 				this.currentScrollIdx = this._getScrollIdx(this.scrollY, this.currentScrollIdx - 1, -1);
@@ -69,8 +83,8 @@ export default {
 		},
 
 		_getScrollIdx(scrollY, start = 0, dir = 1) {
-			let idx = (dir > 0) ? start + 1 : start - 1;
-			const end = (dir > 0) ? this.offsets.length - 1 : 0;
+			let idx = (dir > 0) ? start + 1 : start;
+			const end = (dir > 0) ? this.offsets.length : 0;
 
 			while (true) {
 				const isEnded = (dir > 0) ? (idx > end) : (idx < end);
