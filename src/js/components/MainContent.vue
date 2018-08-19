@@ -2,8 +2,9 @@
 	<div class="main-content">
 		<div class="content" ref="content">
 			<topic-block :topic="topic.intro" class="topic-block-intro">
-				<p>WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
-				<p>LAST UPDATED: {{ topic.intro.lastUpdated }}</p>
+				<p v-if="topic.intro.writtenBy.length > 0">WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
+				<p v-if="topic.intro.lastUpdated">LAST UPDATED: {{ topic.intro.lastUpdated }}</p>
+				<p v-if="topic.intro.warning">{{ topic.intro.warning }}</p>
 			</topic-block>
 
 			<topic-block

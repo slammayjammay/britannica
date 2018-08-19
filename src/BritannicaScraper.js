@@ -55,7 +55,12 @@ class BritannicaScraper {
 		const data = {};
 
 		const sidebarEl = document.querySelector('.md-toc-panel');
-		const li = [].slice.call(document.querySelectorAll('.md-toc-panel li'));
+
+		if (!sidebarEl) {
+			return this.scrapeTopicData(category, topic, subpage);
+		}
+
+		const li = [].slice.call(sidebarEl.querySelectorAll('.md-toc-panel li'));
 
 		data.sections = li.map(el => {
 			return {
@@ -88,7 +93,7 @@ class BritannicaScraper {
 	}
 
 	_constructTopicData(document) {
-		const data = {};
+		const data = { scraped: true };
 
 		if (document.querySelector('#content h1') !== null) {
 			data.intro = this._constructTopicIntro(document);
@@ -142,7 +147,8 @@ class BritannicaScraper {
 			paragraphs: [].map.call(
 				introSection.querySelectorAll('p'),
 				el => el.textContent
-			)
+			),
+			warning: document.querySelector('#content .md-byline .article-type-warning').textContent
 		};
 	}
 

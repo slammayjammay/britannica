@@ -41,15 +41,27 @@ export default {
 	async mounted() {
 		const { category, topic } = this.$route.params;
 
-		await new Promise(resolve => {
+		const needsFilling = await new Promise(resolve => {
 			this.fetch(`/${category}/${topic}`, { scrapeStructure: true })
 			.catch(error => console.log(error))
 			.then(response => response.json())
-			.then(structure => {
-				this.structure = new Structure(structure.intro, structure.sections);
-				resolve();
+			.then(data => {
+				this.structure = new Structure(data.intro, data.sections);
+
+				if (data.scraped) {
+					this.structure.fillIntro(data.intro);
+					this.structure.fill(data.sections);
+					return resolve(false);
+				}
+
+				resolve(true);
 			});
 		});
+
+		if (!needsFilling) {
+			this.init();
+			return;
+		}
 
 		const nextUrl = await new Promise(resolve => {
 			this.fetch(`/${category}/${topic}`)
@@ -62,16 +74,11 @@ export default {
 
 				this.structure.fill(data.sections);
 
-				this.topic = {
-					intro: this.structure.intro,
-					sections: this.structure.tree.sections
-				};
-
 				resolve(data.nextUrl);
 			});
 		});
 
-		this.ready = true;
+		this.init();
 
 		if (nextUrl) {
 			this.continuouslyFill(nextUrl);
@@ -105,6 +112,15 @@ export default {
 					this.continuouslyFill(data.nextUrl);
 				}
 			});
+		},
+
+		init() {
+			this.topic = {
+				intro: this.structure.intro,
+				sections: this.structure.tree.sections
+			};
+
+			this.ready = true;
 		}
 	}
 };

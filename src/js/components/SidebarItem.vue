@@ -1,6 +1,6 @@
 <template>
 	<li class="sidebar-item" :class="sidebarClass">
-		<a ref="anchor" :href="`#${section.id}`" @click="onClick">{{ section.sidebarHeader }}</a>
+		<a ref="anchor" :href="`#${section.id}`" @click="onClick">{{ section.sidebarHeader || section.header }}</a>
 		<ul>
 			<sidebar-item
 				v-for="section in section.sections"
