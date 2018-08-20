@@ -148,7 +148,10 @@ class BritannicaScraper {
 				introSection.querySelectorAll('p'),
 				el => el.textContent
 			),
-			warning: document.querySelector('#content .md-byline .article-type-warning').textContent
+			warning: (() => {
+				const warningEl = document.querySelector('#content .md-byline .article-type-warning');
+				return warningEl ? warningEl.textContent : null;
+			})()
 		};
 	}
 
