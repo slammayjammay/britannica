@@ -40,7 +40,7 @@ export default {
 		this.currentScrollIdx = this._getScrollIdx(this.scrollY, -1);
 		eventBus.$emit('scroll-active-block', this.currentScrollIdx);
 
-		eventBus.$on('blocks-fetched', () => {
+		eventBus.$on('resize', () => {
 			this.offsets = this._calculateOffsets();
 			this.currentScrollIdx = this._getScrollIdx(this.scrollY, -1);
 			eventBus.$emit('scroll-active-block', this.currentScrollIdx);

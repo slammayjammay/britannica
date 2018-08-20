@@ -20,6 +20,7 @@
 <script>
 import DynamicHeading from './DynamicHeading.vue';
 import DeepLink from './DeepLink.vue';
+import eventBus from '../utils/event-bus';
 
 export default {
 	name: 'topic-block',

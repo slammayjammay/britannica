@@ -88,6 +88,8 @@ export default {
 	position: absolute;
 	height: 100vh;
 	overflow: scroll;
+	padding-bottom: 3em;
+	box-sizing: border-box;
 
 	&.collapsed {
 		display: none;

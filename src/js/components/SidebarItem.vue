@@ -61,10 +61,6 @@ export default {
 li.sidebar-item {
 	list-style-type: none;
 
-	&-level-0:last-child .sidebar-item:last-child {
-		padding-bottom: 3em;
-	}
-
 	a {
 		display: block;
 		padding: 5px;

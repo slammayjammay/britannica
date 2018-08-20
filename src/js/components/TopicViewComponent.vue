@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
 import StickyComponent from './StickyComponent.vue';
 import MainContent from './MainContent.vue';
 import Structure from '../utils/Structure';
@@ -39,6 +40,10 @@ export default {
 		}
 	},
 	async mounted() {
+		this._onImageLoad = debounce(() => {
+			this.$nextTick(() => eventBus.$emit('resize'));
+		}, 400);
+
 		const { category, topic } = this.$route.params;
 
 		const needsFilling = await new Promise(resolve => {
@@ -103,10 +108,7 @@ export default {
 			.then(data => {
 				this.structure.fill(data.sections);
 
-				this.$nextTick(() => {
-					eventBus.$emit('resize');
-					eventBus.$emit('blocks-fetched');
-				});
+				this.onStructureFilled();
 
 				if (data.nextUrl) {
 					this.continuouslyFill(data.nextUrl);
@@ -121,6 +123,14 @@ export default {
 			};
 
 			this.ready = true;
+
+			this.$nextTick(() => this.onStructureFilled());
+		},
+
+		onStructureFilled() {
+			[].slice.call(this.$el.querySelectorAll('img')).forEach(image => {
+				image.addEventListener('load', this._onImageLoad);
+			});
 
 			this.$nextTick(() => {
 				eventBus.$emit('resize');
