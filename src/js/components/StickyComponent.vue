@@ -10,6 +10,8 @@
 					</span>
 					<span v-if="idx < menuItems.length - 1" class="header-menu-item header-menu-spacer">•</span>
 				</template>
+
+				<header-search-component />
 			</div>
 		</div>
 
@@ -23,12 +25,14 @@
 
 <script>
 import SubheaderComponent from './SubheaderComponent.vue';
+import HeaderSearchComponent from './HeaderSearchComponent.vue';
 import Sidebar from './Sidebar.vue';
 
 export default {
 	props: ['scrollY', 'topic'],
 	components: {
 		SubheaderComponent,
+		HeaderSearchComponent,
 		Sidebar
 	},
 	data() {
