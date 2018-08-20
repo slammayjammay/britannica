@@ -64,8 +64,8 @@ export default {
 			return blocks.map(el => el.offsetTop - 146);
 		},
 
-		async _onScroll(options = {}) {
-			if (options.smoothscroll) {
+		async _onScroll(scrollFlags) {
+			if (scrollFlags.noSidebarActivity) {
 				return;
 			}
 

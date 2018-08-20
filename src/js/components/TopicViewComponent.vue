@@ -17,6 +17,7 @@ import StickyComponent from './StickyComponent.vue';
 import MainContent from './MainContent.vue';
 import Structure from '../utils/Structure';
 import eventBus from '../utils/event-bus';
+import smoothScroll from '../utils/smooth-scroll';
 
 export default {
 	components: {
@@ -40,6 +41,10 @@ export default {
 		}
 	},
 	async mounted() {
+		this.needsToDeepLink = !!this.$route.hash;
+
+		eventBus.$once('scroll', () => this.needsToDeepLink = false);
+
 		this._onImageLoad = debounce(() => {
 			this.$nextTick(() => eventBus.$emit('resize'));
 		}, 400);
@@ -135,6 +140,16 @@ export default {
 			this.$nextTick(() => {
 				eventBus.$emit('resize');
 				eventBus.$emit('blocks-fetched');
+
+				if (this.needsToDeepLink) {
+					const id = this.$route.hash.replace('#', '');
+					const el = document.getElementById(id);
+
+					if (el) {
+						this.needsToDeepLink = false;
+						smoothScroll(id);
+					}
+				}
 			});
 		}
 	}

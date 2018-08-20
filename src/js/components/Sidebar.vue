@@ -59,7 +59,7 @@ export default {
 	methods: {
 		_onSidebarItemClick(child, anchorTag) {
 			const id = anchorTag.getAttribute('href').replace('#', '');
-			smoothScroll(id);
+			smoothScroll(id, { scrollFlags: { noSidebarActivity: true } });
 
 			if (this.activeItem) {
 				this.activeItem.setInactive();
