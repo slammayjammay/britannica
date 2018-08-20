@@ -6,7 +6,7 @@
 
 		<slot></slot>
 
-		<p v-for="paragraph in topic.paragraphs">{{ paragraph }}</p>
+		<div ref="paragraphs"></div>
 
 		<topic-block
 			v-for="section in topic.sections"
@@ -30,6 +30,26 @@ export default {
 	components: {
 		DynamicHeading,
 		DeepLink
+	},
+	mounted() {
+		for (let paragraphHTML of this.topic.paragraphs) {
+			const p = this.createParagraph(paragraphHTML);
+			this.$refs.paragraphs.appendChild(p);
+		}
+	},
+
+	methods: {
+		createParagraph(inerHTML) {
+			const p = document.createElement('p');
+			p.innerHTML = inerHTML;
+
+			[].slice.call(p.querySelectorAll('a')).forEach(anchor => {
+				const href = anchor.getAttribute('href');
+				anchor.setAttribute('href', href.replace('https://www.britannica.com', ''));
+			});
+
+			return p;
+		}
 	}
 };
 </script>

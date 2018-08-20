@@ -121,6 +121,11 @@ export default {
 			};
 
 			this.ready = true;
+
+			this.$nextTick(() => {
+				eventBus.$emit('resize');
+				eventBus.$emit('blocks-fetched');
+			});
 		}
 	}
 };

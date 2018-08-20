@@ -85,7 +85,9 @@ export default {
 @import '../../scss/_settings.scss';
 
 .sidebar {
-	height: 100%;
+	position: absolute;
+	height: 100vh;
+	overflow: scroll;
 
 	&.collapsed {
 		display: none;
