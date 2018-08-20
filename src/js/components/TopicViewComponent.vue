@@ -73,7 +73,7 @@ export default {
 			return;
 		}
 
-		const nextUrl = await new Promise(resolve => {
+		const nextUrls = await new Promise(resolve => {
 			this.fetch(`/${category}/${topic}`)
 			.catch(error => console.log(error))
 			.then(response => response.json())
@@ -84,14 +84,22 @@ export default {
 
 				this.structure.fill(data.sections);
 
-				resolve(data.nextUrl);
+				resolve(data.nextUrls);
 			});
 		});
 
 		this.init();
 
-		if (nextUrl) {
-			this.continuouslyFill(nextUrl);
+		if (nextUrls) {
+			for (let url of nextUrls) {
+				this.fetch(url)
+					.catch(error => console.log(error))
+					.then(response => response.json())
+					.then(data => {
+						this.structure.fill(data.sections);
+						this.onStructureFilled();
+					});
+			}
 		}
 	},
 	methods: {
@@ -103,21 +111,6 @@ export default {
 					'Accept': 'application/json'
 				},
 				body: body ? JSON.stringify(body) : null
-			});
-		},
-
-		continuouslyFill(nextUrl) {
-			this.fetch(nextUrl)
-			.catch(error => console.log(error))
-			.then(response => response.json())
-			.then(data => {
-				this.structure.fill(data.sections);
-
-				this.onStructureFilled();
-
-				if (data.nextUrl) {
-					this.continuouslyFill(data.nextUrl);
-				}
 			});
 		},
 
