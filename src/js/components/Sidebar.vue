@@ -59,7 +59,7 @@ export default {
 	methods: {
 		_onSidebarItemClick(child, anchorTag) {
 			const id = anchorTag.getAttribute('href').replace('#', '');
-			smoothScroll(id);
+			smoothScroll(id, { scrollFlags: { noSidebarActivity: true } });
 
 			if (this.activeItem) {
 				this.activeItem.setInactive();
@@ -85,7 +85,11 @@ export default {
 @import '../../scss/_settings.scss';
 
 .sidebar {
-	height: 100%;
+	position: absolute;
+	height: 100vh;
+	overflow: scroll;
+	padding-bottom: 3em;
+	box-sizing: border-box;
 
 	&.collapsed {
 		display: none;

@@ -4,7 +4,8 @@ export default {
 		level: { type: Number, default: 1 }
 	},
 	render(createElement) {
-		return createElement(`h${this.level}`, this.$slots.default);
+		const level = Math.min(6, this.level);
+		return createElement(`h${level}`, this.$slots.default);
 	}
 };
 </script>

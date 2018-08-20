@@ -17,11 +17,11 @@ export default {
 		this._onResize = this._onResize.bind(this);
 		this._onScroll = this._onScroll.bind(this);
 
-		this._isSmoothScrolling = false;
+		this._scrollFlags = null;
 
 		window.addEventListener('resize', () => eventBus.$emit('resize'));
 		window.addEventListener('scroll', () => {
-			eventBus.$emit('scroll', { smoothscroll: this._isSmoothScrolling });
+			eventBus.$emit('scroll', this._scrollFlags || {});
 		});
 
 		window.addEventListener('load', () => {
@@ -35,8 +35,8 @@ export default {
 		eventBus.$on('sidebar-open', () => eventBus.$emit('resize'));
 		eventBus.$on('sidebar-collapse', () => this.isCollapsed = true);
 		eventBus.$on('sidebar-open', () => this.isCollapsed = false);
-		eventBus.$on('smoothscroll-begin', () => this._isSmoothScrolling = true);
-		eventBus.$on('smoothscroll-end', () => this._isSmoothScrolling = false);
+		eventBus.$on('smoothscroll-begin', (scrollFlags) => this._scrollFlags = scrollFlags);
+		eventBus.$on('smoothscroll-end', () => this._scrollFlags = null);
 
 		this.scrollY = window.scrollY;
 	},

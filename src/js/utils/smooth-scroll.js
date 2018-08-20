@@ -2,12 +2,13 @@ import eventBus from './event-bus';
 
 const DEFAULT_OPTIONS = {
 	duration: 0.4,
-	offsetFromTop: 0
+	offsetFromTop: 0,
+	scrollFlags: {}
 };
 
 /**
  * @param {string} id - The id of the element to scroll to.
- * @param {number} offsetFromTop - "Padding" between the element and the viewport.
+ * @param {object} options -- see DEFAULT_OPTIONS.
  */
 export default (id, options = {}) => {
 	options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -48,7 +49,7 @@ export default (id, options = {}) => {
 		}
 	}
 
-	eventBus.$emit('smoothscroll-begin');
+	eventBus.$emit('smoothscroll-begin', options.scrollFlags);
 	scroll();
 };
 

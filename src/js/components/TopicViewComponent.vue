@@ -12,10 +12,12 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
 import StickyComponent from './StickyComponent.vue';
 import MainContent from './MainContent.vue';
 import Structure from '../utils/Structure';
 import eventBus from '../utils/event-bus';
+import smoothScroll from '../utils/smooth-scroll';
 
 export default {
 	components: {
@@ -39,6 +41,14 @@ export default {
 		}
 	},
 	async mounted() {
+		this.needsToDeepLink = !!this.$route.hash;
+
+		eventBus.$once('scroll', () => this.needsToDeepLink = false);
+
+		this._onImageLoad = debounce(() => {
+			this.$nextTick(() => eventBus.$emit('resize'));
+		}, 400);
+
 		const { category, topic } = this.$route.params;
 
 		const needsFilling = await new Promise(resolve => {
@@ -63,7 +73,7 @@ export default {
 			return;
 		}
 
-		const nextUrl = await new Promise(resolve => {
+		const nextUrls = await new Promise(resolve => {
 			this.fetch(`/${category}/${topic}`)
 			.catch(error => console.log(error))
 			.then(response => response.json())
@@ -74,14 +84,22 @@ export default {
 
 				this.structure.fill(data.sections);
 
-				resolve(data.nextUrl);
+				resolve(data.nextUrls);
 			});
 		});
 
 		this.init();
 
-		if (nextUrl) {
-			this.continuouslyFill(nextUrl);
+		if (nextUrls) {
+			for (let url of nextUrls) {
+				this.fetch(url)
+					.catch(error => console.log(error))
+					.then(response => response.json())
+					.then(data => {
+						this.structure.fill(data.sections);
+						this.onStructureFilled();
+					});
+			}
 		}
 	},
 	methods: {
@@ -96,24 +114,6 @@ export default {
 			});
 		},
 
-		continuouslyFill(nextUrl) {
-			this.fetch(nextUrl)
-			.catch(error => console.log(error))
-			.then(response => response.json())
-			.then(data => {
-				this.structure.fill(data.sections);
-
-				this.$nextTick(() => {
-					eventBus.$emit('resize');
-					eventBus.$emit('blocks-fetched');
-				});
-
-				if (data.nextUrl) {
-					this.continuouslyFill(data.nextUrl);
-				}
-			});
-		},
-
 		init() {
 			this.topic = {
 				intro: this.structure.intro,
@@ -121,6 +121,29 @@ export default {
 			};
 
 			this.ready = true;
+
+			this.$nextTick(() => this.onStructureFilled());
+		},
+
+		onStructureFilled() {
+			[].slice.call(this.$el.querySelectorAll('img')).forEach(image => {
+				image.addEventListener('load', this._onImageLoad);
+			});
+
+			this.$nextTick(() => {
+				eventBus.$emit('resize');
+				eventBus.$emit('blocks-fetched');
+
+				if (this.needsToDeepLink) {
+					const id = this.$route.hash.replace('#', '');
+					const el = document.getElementById(id);
+
+					if (el) {
+						this.needsToDeepLink = false;
+						smoothScroll(id);
+					}
+				}
+			});
 		}
 	}
 };
