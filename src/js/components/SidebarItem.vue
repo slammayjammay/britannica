@@ -1,6 +1,11 @@
 <template>
 	<li class="sidebar-item" :class="sidebarClass">
-		<a ref="anchor" :href="`#${section.id}`" @click="onClick">{{ section.sidebarHeader || section.header }}</a>
+		<a v-if="section.id" ref="anchor" class="anchor" :href="`#${section.id}`" @click="onClick">
+			{{ section.sidebarHeader || section.header }}
+		</a>
+		<span v-else class="anchor anchor-fake">
+			{{ section.sidebarHeader || section.header }}
+		</span>
 		<ul>
 			<sidebar-item
 				v-for="section in section.sections"
@@ -61,18 +66,18 @@ export default {
 li.sidebar-item {
 	list-style-type: none;
 
-	a {
+	.anchor {
 		display: block;
 		padding: 5px;
 		text-decoration: none;
 		color: #126596;
 
-		&:hover {
+		&:hover, &-fake {
 			background: #e6e6e6;
 		}
 	}
 
-	&.active > a {
+	&.active > .anchor {
 		background: #999;
 		color: white;
 	}

@@ -16,7 +16,7 @@
 		</div>
 
 		<div class="header-bottom">
-			<subheader-component :scrollY="scrollY" :topic="topic"></subheader-component>
+			<subheader-component :scrollY="scrollY" :topic="topic"/>
 		</div>
 
 		<search-modal-component/>

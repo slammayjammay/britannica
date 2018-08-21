@@ -1,13 +1,11 @@
 <template>
 	<div class="topic-view" :class="klass">
-		<template v-if="ready">
-			<sticky-component :scrollY="scrollY" :topic="topic"></sticky-component>
+		<sticky-component :scrollY="scrollY" :topic="topic"></sticky-component>
 
-			<div class="flex">
-				<div class="sidebar-placeholder sidebar-width"></div>
-				<main-content :scrollY="scrollY" :topic="topic"/>
-			</div>
-		</template>
+		<div class="flex">
+			<div class="sidebar-placeholder sidebar-width"></div>
+			<main-content v-if="topic" :scrollY="scrollY" :topic="topic"/>
+		</div>
 	</div>
 </template>
 
@@ -27,10 +25,8 @@ export default {
 	props: ['scrollY'],
 	data() {
 		return {
-			ready: false,
 			topic: null,
-			isCollapsed: false,
-			topic: []
+			isCollapsed: false
 		};
 	},
 	computed: {
@@ -120,8 +116,6 @@ export default {
 				sections: this.structure.tree.sections,
 				facts: this.structure.facts
 			};
-
-			this.ready = true;
 
 			this.$nextTick(() => this.onStructureFilled());
 		},

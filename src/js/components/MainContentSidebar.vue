@@ -1,15 +1,23 @@
 <template>
 	<div class="main-content-sidebar">
-		<template v-for="fact in topic.facts">
-			<div class="fact">
-				<span class="fact-header">{{ fact.header.toUpperCase() }}</span>
-				<p v-for="paragraph in fact.paragraphs" class="fact-paragraph">{{ paragraph }}</p>
-			</div>
-		</template>
+		<div class="fact-box" ref="factBox">
+			<template v-for="fact in topic.facts">
+				<div class="fact">
+					<span class="fact-header">{{ fact.header.toUpperCase() }}</span>
+					<div class="fact-paragraphs"></div>
+					<p v-for="paragraphHTML in fact.paragraphs"
+					v-html="parseBritannicaHTML(paragraphHTML)"
+					class="fact-paragraph needs-link-parsing"
+					/>
+				</div>
+			</template>
+		</div>
 	</div>
 </template>
 
 <script>
+import parseBritannicaHTML from '../utils/parseBritannicaHTML';
+
 export default {
 	props: ['topic']
 };

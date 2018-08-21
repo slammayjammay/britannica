@@ -5,7 +5,7 @@
 		</div>
 		<div class="main-content-header main-content-width subheader-color">
 			<button class="sidebar-open-button" ref="sidebarOpenButton">+</button>
-			<h1 class="h1">{{ topic.intro.header }}</h1>
+			<h1 v-if="topic" class="h1">{{ topic.intro.header }}</h1>
 			<div class="scroll-indicator" ref="scrollIndicator"></div>
 		</div>
 	</div>
@@ -35,6 +35,8 @@ export default {
 	mounted() {
 		this._onResize = this._onResize.bind(this);
 		this._onScroll = this._onScroll.bind(this);
+
+		this._mainContentEl = null;
 
 		this.$refs.sidebarCollapseButton.addEventListener('click', () => eventBus.$emit('sidebar-collapse'));
 		this.$refs.sidebarOpenButton.addEventListener('click', () => eventBus.$emit('sidebar-open'));
@@ -70,9 +72,15 @@ export default {
 		},
 
 		_resize() {
-			const mainContentEl = document.querySelector('.main-content .content');
-			const mainContentTop = mainContentEl.offsetTop;
-			const mainContentHeight = mainContentEl.offsetHeight;
+			this._mainContentEl = document.querySelector('.main-content .content');
+
+			if (!this._mainContentEl) {
+				eventBus.$once('blocks-fetched', () => this._resize());
+				return;
+			}
+
+			const mainContentTop = this._mainContentEl.offsetTop;
+			const mainContentHeight = this._mainContentEl.offsetHeight;
 
 			this.scrollingDistance = mainContentTop + mainContentHeight - window.innerHeight;
 		}
@@ -81,6 +89,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../scss/settings';
+
 $border-color: #ccc;
 
 button {
@@ -110,6 +120,8 @@ button {
 	}
 
 	.main-content-header {
+		box-sizing: border-box;
+		height: $header-bottom-height;
 		border-bottom: 1px solid $border-color;
 		position: relative;
 

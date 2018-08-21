@@ -82,11 +82,8 @@ class BritannicaScraper {
 				return {
 					header: boxEl.querySelector('dt') && boxEl.querySelector('dt').textContent,
 					paragraphs: (() => {
-						if (boxEl.querySelector('ul')) {
-							return [].slice.call(boxEl.querySelectorAll('li')).map(el => el.textContent);
-						} else {
-							return [].slice.call(boxEl.querySelectorAll('dd')).map(el => el.textContent);
-						}
+						const selector = boxEl.querySelector('ul') ? 'li' : 'dd';
+						return [].slice.call(boxEl.querySelectorAll(selector)).map(el => el.innerHTML);
 					})()
 				};
 			});

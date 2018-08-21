@@ -1,6 +1,6 @@
 <template>
 	<div class="sidebar sidebar-width subheader-color" :class="sidebarClass">
-		<ul>
+		<ul v-if="topic">
 			<sidebar-item
 				:section="topic.intro"
 				@sidebar-item-click="_onSidebarItemClick"
@@ -42,21 +42,26 @@ export default {
 		this._onSidebarItemClick = this._onSidebarItemClick.bind(this);
 		this._onActiveBlock = this._onActiveBlock.bind(this);
 
-		this.activeItem = null;
-		this.sidebarItems = [];
+		this.topic ? this.init() : eventBus.$once('blocks-fetched', () => this.init());
 
-		const pushChildren = (child) => {
-			this.sidebarItems.push(child);
-			child.$children.forEach(pushChildren);
-		};
-		this.$children.forEach(pushChildren);
-
-		eventBus.$on('sidebar-item-click', this._onSidebarItemClick);
-		eventBus.$on('scroll-active-block', this._onActiveBlock);
 		eventBus.$on('sidebar-collapse', () => this.isCollapsed = true);
 		eventBus.$on('sidebar-open', () => this.isCollapsed = false);
 	},
 	methods: {
+		init() {
+			this.activeItem = null;
+			this.sidebarItems = [];
+
+			const pushChildren = (child) => {
+				this.sidebarItems.push(child);
+				child.$children.forEach(pushChildren);
+			};
+			this.$children.forEach(pushChildren);
+
+			eventBus.$on('sidebar-item-click', this._onSidebarItemClick);
+			eventBus.$on('scroll-active-block', this._onActiveBlock);
+		},
+
 		_onSidebarItemClick(child, anchorTag) {
 			const id = anchorTag.getAttribute('href').replace('#', '');
 			smoothScroll(id, { scrollFlags: { noSidebarActivity: true } });
