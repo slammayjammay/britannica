@@ -69,7 +69,28 @@ class BritannicaScraper {
 				sidebarHeader: el.children[0].textContent
 			};
 		});
+
 		data.intro = data.sections.shift();
+
+		data.facts = (() => {
+			const factsEl = document.querySelector('.fact-box');
+			if (!factsEl) {
+				return [];
+			}
+
+			return [].slice.call(factsEl.querySelectorAll('dl')).map(boxEl => {
+				return {
+					header: boxEl.querySelector('dt') && boxEl.querySelector('dt').textContent,
+					paragraphs: (() => {
+						if (boxEl.querySelector('ul')) {
+							return [].slice.call(boxEl.querySelectorAll('li')).map(el => el.textContent);
+						} else {
+							return [].slice.call(boxEl.querySelectorAll('dd')).map(el => el.textContent);
+						}
+					})()
+				};
+			});
+		})();
 
 		return { data };
 	}
@@ -136,23 +157,25 @@ class BritannicaScraper {
 
 	_constructTopicIntro(document) {
 		const introSection = document.querySelector('#content article section');
+		const warning = (() => {
+			const warningEl = document.querySelector('#content .md-byline .article-type-warning');
+			return warningEl ? warningEl.textContent : null;
+		})();
+
 		return {
 			intro: true,
 			level: parseInt(introSection.getAttribute('data-level')),
-			id: introSection.getAttribute('id').replace('#', ''),
+			id: introSection.getAttribute('id') && introSection.getAttribute('id').replace('#', ''),
 			header: document.querySelector('#content h1').textContent,
 			writtenBy: [].map.call(
 				document.querySelectorAll('#content .md-byline .written-by > ul li'),
 				el => el.textContent
 			),
-			paragraphs: [].map.call(
+			paragraphs: warning ? [] : [].map.call(
 				introSection.querySelectorAll('p'),
 				el => el.innerHTML
 			),
-			warning: (() => {
-				const warningEl = document.querySelector('#content .md-byline .article-type-warning');
-				return warningEl ? warningEl.textContent : null;
-			})()
+			warning
 		};
 	}
 
