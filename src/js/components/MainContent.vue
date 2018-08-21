@@ -15,6 +15,7 @@
 				:level="1"
 			></topic-block>
 		</div>
+
 		<main-content-sidebar :topic="topic"></main-content-sidebar>
 	</div>
 </template>
@@ -113,11 +114,11 @@ export default {
 
 .main-content {
 	display: flex;
-	margin-top: $header-height;
+	padding-top: $header-height + 30px;
 
 	.content {
 		flex-grow: 1;
-		padding: 30px;
+		padding: 0 30px 30px 30px;
 	}
 }
 </style>

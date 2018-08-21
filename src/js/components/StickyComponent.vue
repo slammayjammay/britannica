@@ -11,13 +11,15 @@
 					<span v-if="idx < menuItems.length - 1" class="header-menu-item header-menu-spacer">•</span>
 				</template>
 
-				<header-search-component />
+				<header-search-component class="header-menu-item"/>
 			</div>
 		</div>
 
 		<div class="header-bottom">
 			<subheader-component :scrollY="scrollY" :topic="topic"></subheader-component>
 		</div>
+
+		<search-modal-component/>
 
 		<sidebar :scrollY="scrollY" :topic="topic"/>
 	</div>
@@ -26,6 +28,7 @@
 <script>
 import SubheaderComponent from './SubheaderComponent.vue';
 import HeaderSearchComponent from './HeaderSearchComponent.vue';
+import SearchModalComponent from './SearchModalComponent.vue';
 import Sidebar from './Sidebar.vue';
 
 export default {
@@ -33,6 +36,7 @@ export default {
 	components: {
 		SubheaderComponent,
 		HeaderSearchComponent,
+		SearchModalComponent,
 		Sidebar
 	},
 	data() {
@@ -75,16 +79,23 @@ export default {
 
 .header-top {
 	background: #084465;
-	padding: 5px;
+	padding: 5px 15px 0;
 	color: white;
 
 	.header-title-row, .header-menu-row {
 		color: white;
 	}
 
+	hr {
+		margin-bottom: 0;
+	}
+
 	.header-menu-row {
 		.header-menu-item {
 			margin-right: 5px;
+			display: inline-block;
+			padding-top: 10px;
+			padding-bottom: 10px;
 
 			&.header-menu-spacer {
 				margin-right: 6px;

@@ -2,7 +2,7 @@
 	<div class="main-content-sidebar">
 		<template v-for="fact in topic.facts">
 			<div class="fact">
-				<span class="fact-header">{{ fact.header }}</span>
+				<span class="fact-header">{{ fact.header.toUpperCase() }}</span>
 				<p v-for="paragraph in fact.paragraphs" class="fact-paragraph">{{ paragraph }}</p>
 			</div>
 		</template>
@@ -19,7 +19,7 @@ export default {
 .main-content-sidebar {
 	width: 300px;
 	flex-shrink: 0;
-	padding: 20px;
+	padding: 0 20px 20px 20px;
 	box-sizing: border-box;
 
 	.fact {

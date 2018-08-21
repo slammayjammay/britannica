@@ -3,10 +3,11 @@ class Structure {
 	 * @param {object} intro - The first section in the sidebar.
 	 * @param {array} sections - The remaining sections in the sidebar.
 	 */
-	constructor(intro, sections) {
-		this.nodeMap = {};
-
+	constructor(intro, sections, facts) {
 		this.intro = intro;
+		this.facts = facts;
+
+		this.nodeMap = {};
 		this.tree = this.createTree(sections);
 	}
 
@@ -25,7 +26,8 @@ class Structure {
 			} else if (level > lastLevel) {
 				nodesPath.push(lastNode);
 			} else if (level < lastLevel) {
-				nodesPath.pop();
+				const diff = lastLevel - level;
+				nodesPath.splice(nodesPath.length - diff, diff);
 			}
 
 			const parentNode = nodesPath[nodesPath.length - 1];

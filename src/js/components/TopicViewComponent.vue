@@ -56,7 +56,7 @@ export default {
 			.catch(error => console.log(error))
 			.then(response => response.json())
 			.then(data => {
-				this.structure = new Structure(data.intro, data.sections);
+				this.structure = new Structure(data.intro, data.sections, data.facts);
 
 				if (data.scraped) {
 					this.structure.fillIntro(data.intro);
@@ -117,7 +117,8 @@ export default {
 		init() {
 			this.topic = {
 				intro: this.structure.intro,
-				sections: this.structure.tree.sections
+				sections: this.structure.tree.sections,
+				facts: this.structure.facts
 			};
 
 			this.ready = true;
