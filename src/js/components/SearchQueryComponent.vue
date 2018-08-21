@@ -1,9 +1,11 @@
 <template>
 	<div class="search-query">
-		<form action="/search" method="POST" ref="form">
+		<strong class="search-title">What are you looking for?</strong>
+
+		<form class="form" action="/search" method="POST" ref="form">
 			<label for="search-query">Search query:</label>
 			<input id="search-query" class="search-input" name="search-query" type="text" ref="input"></input>
-			<input type="submit"></input>
+			<input class="submit" type="submit"></input>
 		</form>
 
 		<div class="results" v-if="searchResults !== null">
@@ -72,10 +74,28 @@ export default {
 
 <style lang="scss" scoped>
 .search-query {
+	.search-title {
+		font-size: 30px;
+	}
+
+	.form {
+		margin-top: 30px;
+	}
+
 	.search-input {
 		width: 300px;
 		height: 30px;
 		font-size: 15px;
+	}
+
+	.submit {
+		box-sizing: border-box;
+		padding: 5px;
+		-webkit-appearance: none;
+
+		&:hover {
+			cursor: pointer;
+		}
 	}
 
 	.results {

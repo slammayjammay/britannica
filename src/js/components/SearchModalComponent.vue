@@ -1,7 +1,5 @@
 <template>
 	<div class="search-modal" :class="klass">
-		<strong class="label">What are you looking for?</strong>
-
 		<search-query-component/>
 	</div>
 </template>
@@ -71,14 +69,6 @@ export default {
 
 	&-open {
 		display: block;
-	}
-
-	.label {
-		font-size: 30px;
-	}
-
-	.search-query {
-		margin-top: 30px;
 	}
 }
 </style>
