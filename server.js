@@ -26,7 +26,6 @@ if (process.env.NODE_ENV === 'development') {
 	});
 }
 
-server.set('view engine', 'ejs');
 server.use('/dist', express.static('dist'));
 server.use(bodyParser.json());
 
