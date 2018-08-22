@@ -2,7 +2,6 @@
   "name": "britannica",
   "version": "1.0.0",
   "description": "A dumbed-down version of britannica.com",
-  "main": "index.js",
   "scripts": {
     "build": "npm run build:client && npm run build:server",
     "build:client": "webpack --config=./webpack.client.config.js --progress --hide-modules",
@@ -10,9 +9,19 @@
     "dev": "NODE_ENV=development node server.js",
     "start": "NODE_ENV=production node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "encyclopedia",
+    "britannica"
+  ],
+  "author": {
+    "name": "Scott McKenzie",
+    "email": "slammayjammay@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slammayjammay/britannica"
+  },
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",
     "escape-html": "^1.0.3",
