@@ -1,26 +1,33 @@
 <template>
 	<div class="main-content">
 		<div class="content" ref="content">
-			<topic-block :topic="topic.intro" class="topic-block-intro">
-				<p v-if="topic.intro.writtenBy.length > 0">WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
-				<p v-if="topic.intro.lastUpdated">LAST UPDATED: {{ topic.intro.lastUpdated }}</p>
-				<p v-if="topic.intro.warning">{{ topic.intro.warning }}</p>
-			</topic-block>
+			<template v-if="topic">
+				<topic-block :topic="topic.intro" class="topic-block-intro">
+					<p v-if="topic.intro.writtenBy.length > 0">WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
+					<p v-if="topic.intro.lastUpdated">LAST UPDATED: {{ topic.intro.lastUpdated }}</p>
+					<p v-if="topic.intro.warning">{{ topic.intro.warning }}</p>
+				</topic-block>
 
-			<topic-block
+				<topic-block
 				v-for="section in topic.sections"
 				v-if="section.isFilled"
 				:key="section.header"
 				:topic="section"
 				:level="1"
-			></topic-block>
+				></topic-block>
+			</template>
+
+			<template v-else>
+				<main-content-loader/>
+			</template>
 		</div>
 
-		<main-content-sidebar :topic="topic"></main-content-sidebar>
+		<main-content-sidebar v-if="topic" :topic="topic"></main-content-sidebar>
 	</div>
 </template>
 
 <script>
+import MainContentLoader from './MainContentLoader.vue';
 import MainContentSidebar from './MainContentSidebar.vue';
 import TopicBlock from './TopicBlock.vue';
 import eventBus from '../utils/event-bus';
@@ -28,6 +35,7 @@ import eventBus from '../utils/event-bus';
 export default {
 	props: ['scrollY', 'topic'],
 	components: {
+		MainContentLoader,
 		MainContentSidebar,
 		TopicBlock
 	},

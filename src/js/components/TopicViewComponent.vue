@@ -4,7 +4,7 @@
 
 		<div class="flex">
 			<div class="sidebar-placeholder sidebar-width"></div>
-			<main-content v-if="topic" :scrollY="scrollY" :topic="topic"/>
+			<main-content :scrollY="scrollY" :topic="topic"/>
 		</div>
 	</div>
 </template>
