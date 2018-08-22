@@ -16,7 +16,7 @@ import MainContent from './MainContent.vue';
 import Structure from '../utils/Structure';
 import eventBus from '../utils/event-bus';
 import smoothScroll from '../utils/smooth-scroll';
-import australiaStructure from '../../topics/australia.json';
+import croatiaStructure from '../../topics/croatia.json';
 
 export default {
 	components: {
@@ -46,7 +46,7 @@ export default {
 			this.$nextTick(() => eventBus.$emit('resize'));
 		}, 400);
 
-		this.structure = australiaStructure;
+		this.structure = croatiaStructure;
 
 		this.init();
 
