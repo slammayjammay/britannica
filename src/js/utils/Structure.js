@@ -63,6 +63,7 @@ class Structure {
 		this.intro.header = intro.header;
 		this.intro.paragraphs = intro.paragraphs.map(html => parseBritannicaHTML(html));
 		this.intro.writtenBy = intro.writtenBy;
+		this.intro.isFilled = true;
 	}
 
 	fill(sections) {

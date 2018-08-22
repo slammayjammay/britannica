@@ -42,13 +42,20 @@ export default {
 				classes.push('active');
 			}
 
+			if (!this.section.isFilled) {
+				classes.push('disabled');
+			}
+
 			return classes.join(' ');
 		}
 	},
 	methods: {
 		onClick(e) {
 			e.preventDefault();
-			eventBus.$emit('sidebar-item-click', this, this.$refs.anchor);
+
+			if (this.section.isFilled) {
+				eventBus.$emit('sidebar-item-click', this, this.$refs.anchor);
+			}
 		},
 
 		setActive() {
@@ -75,6 +82,10 @@ li.sidebar-item {
 		&:hover, &-fake {
 			background: #e6e6e6;
 		}
+	}
+
+	&.disabled {
+		opacity: 0.5;
 	}
 
 	&.active > .anchor {
