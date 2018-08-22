@@ -1,3 +1,5 @@
+import parseBritannicaHTML from './parseBritannicaHTML';
+
 class Structure {
 	/**
 	 * @param {object} intro - The first section in the sidebar.
@@ -6,6 +8,12 @@ class Structure {
 	constructor(intro, sections, facts) {
 		this.intro = intro;
 		this.facts = facts;
+
+		if (this.facts) {
+			this.facts.forEach(fact => {
+				fact.paragraphs = fact.paragraphs.map(html => parseBritannicaHTML(html));
+			});
+		}
 
 		this.nodeMap = {};
 		this.tree = this.createTree(sections);
@@ -53,7 +61,7 @@ class Structure {
 
 	fillIntro(intro) {
 		this.intro.header = intro.header;
-		this.intro.paragraphs = intro.paragraphs;
+		this.intro.paragraphs = intro.paragraphs.map(html => parseBritannicaHTML(html));
 		this.intro.writtenBy = intro.writtenBy;
 	}
 
@@ -62,7 +70,7 @@ class Structure {
 			const node = this.nodeMap[section.id];
 
 			node.header = section.header;
-			node.paragraphs = section.paragraphs;
+			node.paragraphs = section.paragraphs.map(html => parseBritannicaHTML(html));
 
 			node.isFilled = true;
 		}

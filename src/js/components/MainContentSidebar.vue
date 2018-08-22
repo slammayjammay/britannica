@@ -6,8 +6,8 @@
 					<span class="fact-header">{{ fact.header.toUpperCase() }}</span>
 					<div class="fact-paragraphs"></div>
 					<p v-for="paragraphHTML in fact.paragraphs"
-					v-html="parseBritannicaHTML(paragraphHTML)"
-					class="fact-paragraph needs-link-parsing"
+						v-html="paragraphHTML"
+						class="fact-paragraph needs-link-parsing"
 					/>
 				</div>
 			</template>
@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import parseBritannicaHTML from '../utils/parseBritannicaHTML';
-
 export default {
 	props: ['topic']
 };
