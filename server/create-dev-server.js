@@ -1,8 +1,8 @@
 const { join } = require('path');
 const webpack = require('webpack');
 const MFS = require('memory-fs');
-const clientConfig = require('./webpack.client.config');
-const serverConfig = require('./webpack.server.config');
+const clientConfig = require('../webpack.client.config');
+const serverConfig = require('../webpack.server.config');
 
 module.exports = (server, options = {}) => {
 	const clientCompiler = webpack(clientConfig);

@@ -4,15 +4,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { createRenderer, createBundleRenderer } = require('vue-server-renderer');
 const createDevServer = require('./create-dev-server');
-const BritannicaScraper = require('./src/BritannicaScraper');
+const BritannicaScraper = require('./BritannicaScraper');
 
 const server = express();
 const PORT = 8080;
 
-const serverBundle = join(__dirname, '/dist/server-bundle.json');
+const serverBundle = join(__dirname, '../dist/server-bundle.json');
 let renderer = createBundleRenderer(serverBundle, {
 	runInNewContext: false,
-	template: readFileSync('./src/index.template.html', 'utf-8')
+	template: readFileSync(join(__dirname, '../src/index.template.html'), 'utf-8')
 });
 
 if (process.env.NODE_ENV === 'development') {

@@ -1,4 +1,3 @@
-const { resolve } = require('path');
 const nodeExternals = require('webpack-node-externals');
 const autoprefixer = require('autoprefixer');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
