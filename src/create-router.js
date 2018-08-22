@@ -8,7 +8,7 @@ export default () => {
 	return new Router({
 		mode: 'history',
 		routes: [
-			{ path: '/', component: GHPagesComponent }
+			{ path: '*', component: GHPagesComponent }
 		]
 	});
 };
