@@ -5,13 +5,10 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const VueServerPlugin = require('vue-server-renderer/server-plugin');
 
 module.exports = {
-	mode: 'development',
+	mode: process.env.NODE_ENV || 'development',
 	entry: './src/entry-server.js',
 	target: 'node',
-	// devtool: 'source-map',
 	output: {
-		// path: resolve(__dirname, 'dist'),
-		// filename: 'server-built.js',
 		libraryTarget: 'commonjs2'
 	},
 	externals: nodeExternals({

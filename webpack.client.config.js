@@ -3,7 +3,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
-	mode: 'development',
+	mode: process.env.NODE_ENV || 'development',
 	entry: './src/entry-client.js',
 	output: {
 		path: resolve(__dirname, 'dist'),
