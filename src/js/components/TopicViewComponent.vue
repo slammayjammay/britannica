@@ -87,7 +87,6 @@ export default {
 		this.init();
 
 		if (nextUrls) {
-			return;
 			for (let url of nextUrls) {
 				this.fetch(url)
 					.catch(error => console.log(error))
