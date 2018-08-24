@@ -5,7 +5,7 @@ Scrapes https://www.britannica.com/.
 Features:
 - Vue + Vue router
 - Server side rendering
-- Page scraping using [parse5](https://github.com/inikulin/parse5)
+- Page scraping using [jsdom](https://github.com/jsdom/jsdom)
 - A faster, simpler, ad-free encyclopedia experience
 
 ## Build
