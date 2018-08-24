@@ -1,6 +1,6 @@
-# Britannica
+# Britannica <small>([gh-pages](https://slammayjammay.github.io/britannica/))</small>
 
-Scrapes https://www.britannica.com/ and displays the results using Vue.
+Scrapes https://www.britannica.com/.
 
 Features:
 - Vue + Vue router

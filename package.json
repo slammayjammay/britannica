@@ -6,8 +6,8 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "webpack --config=./webpack.client.config.js --progress --hide-modules",
     "build:server": "webpack --config=./webpack.server.config.js --progress --hide-modules",
-    "dev": "NODE_ENV=development node server.js",
-    "start": "NODE_ENV=production node server.js"
+    "dev": "NODE_ENV=development node server/index.js",
+    "start": "NODE_ENV=production node server/index.js"
   },
   "keywords": [
     "encyclopedia",
@@ -29,7 +29,6 @@
     "gsap": "^2.0.1",
     "jsdom": "^11.11.0",
     "lodash.debounce": "^4.0.8",
-    "parse5": "^5.1.0",
     "request": "^2.87.0",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",

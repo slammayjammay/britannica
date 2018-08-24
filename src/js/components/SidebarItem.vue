@@ -85,7 +85,9 @@ li.sidebar-item {
 	}
 
 	&.disabled {
-		opacity: 0.5;
+		a {
+			color: gray;
+		}
 	}
 
 	&.active > .anchor {

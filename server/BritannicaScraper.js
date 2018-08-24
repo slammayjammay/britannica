@@ -1,6 +1,7 @@
 const request = require('request');
 const querystring = require('querystring');
 const { JSDOM } = require('jsdom');
+const parseBritannicaHTMLFromElement = require('./parseBritannicaHTMLFromElement');
 
 const BASE_URL = `https://www.britannica.com`;
 const SEARCH_URL = `${BASE_URL}/search?query=`;
@@ -83,7 +84,10 @@ class BritannicaScraper {
 					header: boxEl.querySelector('dt') && boxEl.querySelector('dt').textContent,
 					paragraphs: (() => {
 						const selector = boxEl.querySelector('ul') ? 'li' : 'dd';
-						return [].slice.call(boxEl.querySelectorAll(selector)).map(el => el.innerHTML);
+						return [].map.call(
+							boxEl.querySelectorAll(selector),
+							el => parseBritannicaHTMLFromElement(el)
+						);
 					})()
 				};
 			});
@@ -170,7 +174,7 @@ class BritannicaScraper {
 			),
 			paragraphs: warning ? [] : [].map.call(
 				introSection.querySelectorAll('p'),
-				el => el.innerHTML
+				el => parseBritannicaHTMLFromElement(el)
 			),
 			warning
 		};
