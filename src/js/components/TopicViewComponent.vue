@@ -10,6 +10,8 @@
 </template>
 
 <script>
+const IS_GH_PAGES = false;
+
 import debounce from 'lodash.debounce';
 import StickyComponent from './StickyComponent.vue';
 import MainContent from './MainContent.vue';
@@ -64,6 +66,17 @@ export default {
 		this._onImageLoad = debounce(() => {
 			this.$nextTick(() => eventBus.$emit('resize'));
 		}, 400);
+
+		if (IS_GH_PAGES) {
+			this.structure = require('../../topics/croatia.json');
+			this.init();
+
+			setTimeout(() => {
+				eventBus.$emit('resize');
+				eventBus.$emit('blocks-fetched');
+			}, 0);
+			return;
+		}
 
 		const { category, topic } = this.$route.params;
 
