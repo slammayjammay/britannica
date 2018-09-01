@@ -10,7 +10,7 @@
 </template>
 
 <script>
-const IS_GH_PAGES = false;
+const IS_GH_PAGES = true;
 
 import debounce from 'lodash.debounce';
 import StickyComponent from './StickyComponent.vue';
