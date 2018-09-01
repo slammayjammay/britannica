@@ -1,6 +1,6 @@
 <template>
 	<span role="button" class="header-search" :class="klass">
-		<span>SEARCH BRITANNICA</span>
+		<span class="search-label">SEARCH BRITANNICA</span>
 		<span class="search-icon"></span>
 		<span class="close-icon">&times;</span>
 	</span>
@@ -65,6 +65,12 @@ export default {
 		.close-icon {
 			display: inline-block;
 		}
+	}
+
+	.search-label {
+			@include screen-max-width(1060px) {
+				display: none;
+			}
 	}
 
 	.search-icon {

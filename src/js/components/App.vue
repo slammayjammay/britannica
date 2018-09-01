@@ -1,13 +1,18 @@
 <template>
 	<div id="app">
+		<breakpoint-component/>
 		<router-view :scrollY="scrollY"></router-view>
 	</div>
 </template>
 
 <script>
+import BreakpointComponent from './BreakpointComponent.vue';
 import eventBus from '../utils/event-bus';
 
 export default {
+	components: {
+		BreakpointComponent
+	},
 	data() {
 		return {
 			scrollY: null
@@ -25,16 +30,11 @@ export default {
 		});
 
 		window.addEventListener('load', () => {
-			// need to wait a tick when deeplinking on load
-			requestAnimationFrame(() => eventBus.$emit('app-init'));
+			this.$nextTick(() => eventBus.$emit('resize'));
 		});
 
 		eventBus.$on('resize', this._onResize);
 		eventBus.$on('scroll', this._onScroll);
-		eventBus.$on('sidebar-collapse', () => eventBus.$emit('resize'));
-		eventBus.$on('sidebar-open', () => eventBus.$emit('resize'));
-		eventBus.$on('sidebar-collapse', () => this.isCollapsed = true);
-		eventBus.$on('sidebar-open', () => this.isCollapsed = false);
 		eventBus.$on('smoothscroll-begin', (scrollFlags) => this._scrollFlags = scrollFlags);
 		eventBus.$on('smoothscroll-end', () => this._scrollFlags = null);
 
@@ -75,5 +75,11 @@ $subheader-color: #f2f2f2;
 
 .main-content-width {
 	flex-grow: 1;
+}
+
+.button-reset {
+	background: none;
+	border: none;
+	padding: 0;
 }
 </style>

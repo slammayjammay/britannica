@@ -38,8 +38,28 @@ export default {
 	},
 	async mounted() {
 		this.needsToDeepLink = !!this.$route.hash;
+		this._wasCollapsedOnLarge = false;
+		this._currentBreakpoint = null;
 
 		eventBus.$once('scroll', () => this.needsToDeepLink = false);
+		eventBus.$on('sidebar-open', () => this.isCollapsed = false);
+
+		eventBus.$on('sidebar-collapse', () => {
+			if (this._currentBreakpoint === 'large') {
+				this._wasCollapsedOnLarge = true;
+			}
+			this.isCollapsed = true;
+		});
+
+		eventBus.$on('breakpoint', newBreakpoint => {
+			this._currentBreakpoint = newBreakpoint;
+
+			if (newBreakpoint === 'large' && this.isCollapsed && !this._wasCollapsedOnLarge) {
+				eventBus.$emit('sidebar-open');
+			} else if (newBreakpoint !== 'large' && !this.isCollapsed) {
+				eventBus.$emit('sidebar-collapse');
+			}
+		});
 
 		this._onImageLoad = debounce(() => {
 			this.$nextTick(() => eventBus.$emit('resize'));
@@ -145,9 +165,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.collapsed {
+.topic-view {
+	&.collapsed {
+		.sidebar-placeholder {
+			display: none;
+		}
+	}
+
 	.sidebar-placeholder {
-		display: none;
+		@include viewport(medium) {
+			width: 0;
+		}
 	}
 }
 </style>
