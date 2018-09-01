@@ -196,7 +196,7 @@ class BritannicaScraper {
 			level: parseInt(sectionEl.getAttribute('data-level')),
 			id: sectionEl.getAttribute('id').replace('#', ''),
 			header: sectionEl.querySelector(`h${headerLevel}`).textContent,
-			paragraphs: paragraphs.map(el => el.innerHTML)
+			paragraphs: paragraphs.map(el => parseBritannicaHTMLFromElement(el))
 		};
 	}
 

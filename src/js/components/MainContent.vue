@@ -123,6 +123,9 @@ export default {
 .main-content {
 	display: flex;
 	padding-top: $header-height + 30px;
+	@include viewport(small) {
+		flex-wrap: wrap;
+	}
 
 	.content {
 		flex-grow: 1;

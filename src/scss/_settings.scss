@@ -1,3 +1,10 @@
+// these should not be hard-coded
 $header-top-height: 64px;
 $header-bottom-height: 81px;
 $header-height: $header-top-height + $header-bottom-height;
+
+$header-mobile-width-break: 830px;
+
+$large-breakpoint: 999999px;
+$medium-breakpoint: 1030px;
+$small-breakpoint: 700px;

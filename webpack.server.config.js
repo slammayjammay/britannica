@@ -31,7 +31,12 @@ module.exports = {
 							plugins: () => [autoprefixer()]
 						}
 					},
-					'sass-loader'
+					{
+						loader: 'sass-loader',
+						options: {
+							data: '@import "src/scss/_global.scss";'
+						}
+					}
 				]
 			}
 		]

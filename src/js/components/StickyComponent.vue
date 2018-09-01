@@ -1,14 +1,24 @@
 <template>
 	<div class="sticky-component">
 		<div class="header-top">
-			<div class="header-title-row">Encyclopadia Britannica</div>
-			<hr />
+			<div class="header-top-row">
+				<div class="header-title-row">Encyclopadia Britannica</div>
+				<hr />
+			</div>
 			<div class="header-menu-row">
+				<span class="header-menu-item header-menu-item-hamburger">
+					<button class="hamburger-button button-reset">
+						<div class="ham ham-1"></div>
+						<div class="ham ham-2"></div>
+						<div class="ham ham-3"></div>
+					</button>
+				</span>
+
 				<template v-for="(menuItem, idx) in menuItems">
-					<span class="header-menu-item">
+					<span class="header-menu-item no-mobile">
 						<a :href="menuItem.href" class="header-menu-link" :class="`header-menu-link-${menuItem.copy}`">{{ menuItem.copy }}</a>
+						<span v-if="idx < menuItems.length - 1" class="header-menu-spacer">•</span>
 					</span>
-					<span v-if="idx < menuItems.length - 1" class="header-menu-item header-menu-spacer">•</span>
 				</template>
 
 				<header-search-component class="header-menu-item"/>
@@ -90,6 +100,12 @@ export default {
 		margin-bottom: 0;
 	}
 
+	.header-top-row {
+		@include screen-max-width($header-mobile-width-break) {
+			display: none;
+		}
+	}
+
 	.header-menu-row {
 		.header-menu-item {
 			margin-right: 5px;
@@ -97,7 +113,45 @@ export default {
 			padding-top: 10px;
 			padding-bottom: 10px;
 
-			&.header-menu-spacer {
+			&.no-mobile {
+				@include screen-max-width($header-mobile-width-break) {
+					display: none;
+				}
+			}
+
+			&.header-menu-item-hamburger {
+				@include screen-min-width($header-mobile-width-break) {
+					display: none;
+				}
+
+				.hamburger-button {
+					position: relative;
+					width: 20px;
+					height: 14px;
+
+					&:hover {
+						cursor: pointer;
+
+						.ham {
+							background: #cfdae0;
+						}
+					}
+
+					.ham {
+						position: absolute;
+						left: 0;
+						width: 100%;
+						height: 2px;
+						background: white;
+
+						&-1 { top: 0; }
+						&-2 { top: 0; bottom: 0; margin: auto; }
+						&-3 { bottom: 0; }
+					}
+				}
+			}
+
+			.header-menu-spacer {
 				margin-right: 6px;
 			}
 
