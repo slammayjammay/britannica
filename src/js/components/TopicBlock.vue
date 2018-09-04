@@ -6,8 +6,8 @@
 
 		<slot></slot>
 
-		<div ref="paragraphs">
-			<p v-for="paragraphHTML of topic.paragraphs" v-html="paragraphHTML"></p>
+		<div>
+			<p v-for="elementHTML of topic.elements" v-html="elementHTML"></p>
 		</div>
 
 		<topic-block

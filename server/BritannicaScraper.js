@@ -1,7 +1,7 @@
 const request = require('request');
 const querystring = require('querystring');
 const { JSDOM } = require('jsdom');
-const parseBritannicaHTMLFromElement = require('./parseBritannicaHTMLFromElement');
+const parseBritannicaHTMLFromElement = require('./parse-britannica-html-from-element');
 
 const BASE_URL = `https://www.britannica.com`;
 const SEARCH_URL = `${BASE_URL}/search?query=`;
@@ -82,7 +82,7 @@ class BritannicaScraper {
 			return [].slice.call(factsEl.querySelectorAll('dl')).map(boxEl => {
 				return {
 					header: boxEl.querySelector('dt') && boxEl.querySelector('dt').textContent,
-					paragraphs: (() => {
+					elements: (() => {
 						const selector = boxEl.querySelector('ul') ? 'li' : 'dd';
 						return [].map.call(
 							boxEl.querySelectorAll(selector),
@@ -158,45 +158,49 @@ class BritannicaScraper {
 
 	_constructTopicIntro(document) {
 		const introSection = document.querySelector('#content article section');
-		const warning = (() => {
+		const introWarning = (() => {
 			const warningEl = document.querySelector('#content .md-byline .article-type-warning');
 			return warningEl ? warningEl.textContent : null;
 		})();
 
-		return {
+		const data = this._constructSectionData(introSection, { isIntro: true, introWarning });
+
+		return Object.assign(data, {
+			introWarning,
 			intro: true,
-			level: parseInt(introSection.getAttribute('data-level')),
-			id: introSection.getAttribute('id') && introSection.getAttribute('id').replace('#', ''),
 			header: document.querySelector('#content h1').textContent,
 			writtenBy: [].map.call(
 				document.querySelectorAll('#content .md-byline .written-by > ul li'),
 				el => el.textContent
-			),
-			paragraphs: warning ? [] : [].map.call(
-				introSection.querySelectorAll('p'),
-				el => parseBritannicaHTMLFromElement(el)
-			),
-			warning
-		};
+			)
+		});
 	}
 
-	_constructSectionData(sectionEl) {
+	_constructSectionData(sectionEl, details = {}) {
+		const { isIntro, introWarning } = details;
+
 		const level = parseInt(sectionEl.getAttribute('data-level'));
 		const headerLevel = Math.min(2, level + 1);
+		const elements = [];
 
-		const paragraphs = [];
-
-		for (let child of sectionEl.children) {
-			if (child.tagName === 'P') {
-				paragraphs.push(child);
+		function dig(el) {
+			if (['P', 'IMG'].includes(el.tagName)) {
+				elements.push(el);
+				return;
 			}
+
+			[].filter.call(el.childNodes, el => el.tagName !== 'SECTION').forEach(dig);
+		}
+
+		if (!introWarning) {
+			dig(sectionEl);
 		}
 
 		return {
 			level: parseInt(sectionEl.getAttribute('data-level')),
 			id: sectionEl.getAttribute('id').replace('#', ''),
-			header: sectionEl.querySelector(`h${headerLevel}`).textContent,
-			paragraphs: paragraphs.map(el => parseBritannicaHTMLFromElement(el))
+			header: isIntro ? null : sectionEl.querySelector(`h${headerLevel}`).textContent,
+			elements: elements.map(el => parseBritannicaHTMLFromElement(el))
 		};
 	}
 
