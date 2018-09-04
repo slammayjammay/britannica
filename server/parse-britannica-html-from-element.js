@@ -32,12 +32,15 @@ function parseParagraph(elToParse, dummy) {
 
 		if (childEl.nodeName === '#text') {
 			newElement = document.createTextNode('');
-		} else if (['A', 'STRONG', 'EM', 'SPAN'].includes(childEl.tagName)) {
+		} else if (['A', 'STRONG', 'EM', 'SPAN', 'SUP'].includes(childEl.tagName)) {
 			newElement = document.createElement(childEl.tagName);
 
 			if (childEl.tagName === 'A') {
 				setupAnchorElement(childEl, newElement);
 			}
+		} else {
+			console.log(`SERVER WARNING: unaccounted for element "${childEl.tagName}".`);
+			newElement = document.createTextNode('');
 		}
 
 		newElement.textContent = parseTextContent(childEl);
