@@ -76,6 +76,7 @@ export default {
 	top: 0;
 	left: 0;
 	width: 100%;
+	min-width: $body-min-width;
 }
 
 .sticky-inner {

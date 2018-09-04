@@ -72,7 +72,7 @@ export default {
 		},
 
 		_resize() {
-			this._mainContentEl = document.querySelector('.main-content .content');
+			this._mainContentEl = document.querySelector('.main-content');
 
 			if (!this._mainContentEl) {
 				eventBus.$once('blocks-fetched', () => this._resize());

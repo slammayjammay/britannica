@@ -55,6 +55,7 @@ export default {
 <style lang="scss">
 html, body {
 	margin: 0;
+	min-width: $body-min-width;
 }
 
 $sidebar-width: 300px;
