@@ -2,7 +2,7 @@
 	<div class="sticky-component">
 		<div class="header-top">
 			<div class="header-top-row">
-				<div class="header-title-row">Encyclopadia Britannica</div>
+				<div class="header-title-row">Encyclopædia Britannica</div>
 				<hr />
 			</div>
 			<div class="header-menu-row">
