@@ -117,9 +117,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import '../../scss/_settings.scss';
-
+<style lang="scss">
 .main-content {
 	display: flex;
 	padding-top: $header-height + 30px;
@@ -130,6 +128,10 @@ export default {
 	.content {
 		flex-grow: 1;
 		padding: 0 30px 30px 30px;
+	}
+
+	img {
+		max-width: 100%;
 	}
 }
 </style>

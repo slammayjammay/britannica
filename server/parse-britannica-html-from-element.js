@@ -11,19 +11,16 @@ module.exports = (elToParse) => {
 
 	if (['P', 'LI', 'DD'].includes(elToParse.tagName)) {
 		parseParagraph(elToParse, dummy);
-		return dummy.innerHTML;
-	}
-
-	let newElement;
-
-	if (elToParse.tagName === 'IMG') {
-		newElement = document.createElement('img');
+	} else if (elToParse.tagName === 'IMG') {
+		const newElement = document.createElement('img');
 		setupImgElement(elToParse, newElement);
+		dummy.appendChild(newElement);
 	}
 
-	dummy.appendChild(newElement);
-
-	return dummy.innerHTML;
+	return {
+		tagName: elToParse.tagName,
+		html: dummy.innerHTML
+	};
 };
 
 function parseParagraph(elToParse, dummy) {

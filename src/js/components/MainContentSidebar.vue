@@ -6,8 +6,8 @@
 					<span class="fact-header">{{ fact.header.toUpperCase() }}</span>
 					<div class="fact-paragraphs"></div>
 
-					<p v-for="paragraphHTML in fact.elements"
-						v-html="paragraphHTML"
+					<p v-for="elementData in fact.elements"
+						v-html="elementData.html"
 						class="fact-paragraph"
 					/>
 				</div>

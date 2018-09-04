@@ -7,7 +7,10 @@
 		<slot></slot>
 
 		<div>
-			<p v-for="elementHTML of topic.elements" v-html="elementHTML"></p>
+			<template v-for="elementData of topic.elements">
+				<div v-if="elementData.tagName === 'IMG'" v-html="elementData.html"/>
+				<p v-if="elementData.tagName === 'P'" v-html="elementData.html"/>
+			</template>
 		</div>
 
 		<topic-block
