@@ -9,7 +9,8 @@ const { document } = new JSDOM().window;
 module.exports = (elToParse) => {
 	const dummy = document.createElement('div');
 
-	if (['P', 'LI', 'DD'].includes(elToParse.tagName)) {
+	if (['DIV', 'P', 'LI', 'DD'].includes(elToParse.tagName)) {
+		// assume this element holds only text
 		parseParagraph(elToParse, dummy);
 	} else if (elToParse.tagName === 'IMG') {
 		const newElement = document.createElement('img');

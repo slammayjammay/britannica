@@ -160,7 +160,7 @@ class BritannicaScraper {
 		const introSection = document.querySelector('#content article section');
 		const introWarning = (() => {
 			const warningEl = document.querySelector('#content .md-byline .article-type-warning');
-			return warningEl ? warningEl.textContent : null;
+			return warningEl ? parseBritannicaHTMLFromElement(warningEl) : null;
 		})();
 
 		const data = this._constructSectionData(introSection, { isIntro: true, introWarning });
@@ -198,7 +198,7 @@ class BritannicaScraper {
 
 		return {
 			level: parseInt(sectionEl.getAttribute('data-level')),
-			id: sectionEl.getAttribute('id').replace('#', ''),
+			id: introWarning ? null : sectionEl.getAttribute('id').replace('#', ''),
 			header: isIntro ? null : sectionEl.querySelector(`h${headerLevel}`).textContent,
 			elements: elements.map(el => parseBritannicaHTMLFromElement(el))
 		};

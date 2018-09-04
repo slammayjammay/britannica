@@ -5,7 +5,7 @@
 				<topic-block :topic="topic.intro" class="topic-block-intro">
 					<p v-if="topic.intro.writtenBy.length > 0">WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
 					<p v-if="topic.intro.lastUpdated">LAST UPDATED: {{ topic.intro.lastUpdated }}</p>
-					<p v-if="topic.intro.warning">{{ topic.intro.warning }}</p>
+					<p v-if="topic.intro.introWarning" v-html="topic.intro.introWarning.html"></p>
 				</topic-block>
 
 				<topic-block
@@ -22,7 +22,7 @@
 			</template>
 		</div>
 
-		<main-content-sidebar v-if="topic" :topic="topic"></main-content-sidebar>
+		<main-content-sidebar v-if="topic && topic.facts" :topic="topic"></main-content-sidebar>
 	</div>
 </template>
 
