@@ -4,11 +4,13 @@
 
 		<div class="definition-modal" ref="modal">
 			<template v-if="isLoaded">
+				<div class="full-definition">
+					<a :href="`https://www.merriam-webster.com/dictionary/${data.word}`">SEE FULL</a>
+				</div>
+
 				<strong class="about">{{ data.word }}</strong>
 				<em class="about">{{ data.partOfSpeech }}</em>
 				<span class="about">{{ data.syllables }}</span>
-
-				<a class="full-definition" :href="`https://www.merriam-webster.com/dictionary/${data.word}`">SEE FULL</a>
 
 				<ul>
 					<li v-for="definition in data.definitions">{{ definition }}</li>
@@ -34,7 +36,9 @@ export default {
 		return {
 			data: {},
 			isLoading: false,
-			isLoaded: false
+			isLoaded: false,
+			linkEl: null,
+			dimensions: null
 		}
 	},
 	computed: {
@@ -71,10 +75,16 @@ export default {
 		_onResize() {
 			this._containerWidth = this._mainContentEl.offsetWidth;
 			this._containerHeight = this._mainContentEl.offsetHeight;
+
+			if (this.isLoading || this.isLoaded) {
+				this._calculateDimensions();
+				this._updatePosition();
+			}
 		},
 
 		_onDictionaryLinkClick(el) {
-			const word = el.getAttribute('data-word');
+			this.linkEl = el;
+			const word = this.linkEl.getAttribute('data-word');
 
 			if (word === this.data.word) {
 				if (this.isLoaded) {
@@ -90,16 +100,8 @@ export default {
 			this.isLoaded = false;
 			this.data = {};
 
-			const dimensions = {
-				elWidth: this.$refs.modal.offsetWidth,
-				elHeight: this.$refs.modal.offsetHeight,
-				targetTop: el.offsetTop,
-				targetLeft: el.offsetLeft,
-				targetWidth: el.offsetWidth,
-				targetHeight: el.offsetHeight
-			};
-
-			this._updatePosition(dimensions);
+			this._calculateDimensions();
+			this._updatePosition();
 
 			fetch('/dictionary', {
 				method: 'POST',
@@ -115,26 +117,41 @@ export default {
 					this.isLoading = false;
 					this.isLoaded = true;
 					this.data = data;
-					this._updatePosition(dimensions);
+					this._updatePosition();
 				});
 		},
 
-		_updatePosition(dimensions) {
+		_calculateDimensions() {
+ 			this.dimensions = {
+				elWidth: this.$refs.modal.offsetWidth,
+				elHeight: this.$refs.modal.offsetHeight,
+				targetTop: this.linkEl.offsetTop,
+				targetLeft: this.linkEl.offsetLeft,
+				targetWidth: this.linkEl.offsetWidth,
+				targetHeight: this.linkEl.offsetHeight
+			};
+		},
+
+		_updatePosition() {
 			const marginTop = 18;
 
-			let top = dimensions.targetTop + dimensions.targetHeight;
-			let left = dimensions.targetLeft + dimensions.targetWidth / 2 - dimensions.elWidth / 2;
-			let cornerTop = top + marginTop - 10;
-			let cornerLeft = dimensions.targetLeft + dimensions.targetWidth / 2;
+			const {
+				elWidth, elHeight, targetTop, targetLeft, targetWidth, targetHeight
+			} = this.dimensions;
 
-			if (top + dimensions.elHeight > this._containerHeight) {
-				top = this._containerHeight - dimensions.elHeight;
+			let top = targetTop + targetHeight;
+			let left = targetLeft + targetWidth / 2 - elWidth / 2;
+			let cornerTop = top + marginTop - 10;
+			let cornerLeft = targetLeft + targetWidth / 2;
+
+			if (top + elHeight > this._containerHeight) {
+				top = this._containerHeight - elHeight;
 			}
 
 			if (left < 0) {
 				left = 0;
-			} else if (left + dimensions.elWidth > this._containerWidth) {
-				left = this._containerWidth - dimensions.elWidth;
+			} else if (left + elWidth > this._containerWidth) {
+				left = this._containerWidth - elWidth;
 			}
 
 			this.$refs.modal.style.top = `${top + marginTop}px`;
@@ -174,8 +191,8 @@ $background: wheat;
 		z-index: 1;
 		background: $background;
 		padding: 15px;
-		width: 450px;
-		height: 200px;
+		width: 400px;
+		max-width: 100%;
 		box-sizing: border-box;
 
 		.about {
@@ -183,13 +200,13 @@ $background: wheat;
 		}
 
 		.full-definition {
-			float: right;
+			margin-bottom: 8px;
 		}
 
 		ul {
 			list-style-type: decimal;
 			margin-bottom: 0;
-			height: 130px;
+			max-height: 130px;
 			overflow: scroll;
 
 			li {
