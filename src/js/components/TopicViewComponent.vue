@@ -10,8 +10,6 @@
 </template>
 
 <script>
-const IS_GH_PAGES = false;
-
 import debounce from 'lodash.debounce';
 import StickyComponent from './StickyComponent.vue';
 import MainContent from './MainContent.vue';
@@ -24,7 +22,7 @@ export default {
 		StickyComponent,
 		MainContent
 	},
-	props: ['scrollY'],
+	props: ['scrollY', 'IS_GH_PAGES'],
 	data() {
 		return {
 			topic: null,
@@ -67,7 +65,7 @@ export default {
 			this.$nextTick(() => eventBus.$emit('resize'));
 		}, 400);
 
-		if (IS_GH_PAGES) {
+		if (this.IS_GH_PAGES) {
 			this.structure = require('../../topics/croatia.json');
 			this.init();
 
@@ -75,6 +73,7 @@ export default {
 				eventBus.$emit('resize');
 				eventBus.$emit('blocks-fetched');
 			}, 0);
+
 			return;
 		}
 

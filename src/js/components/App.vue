@@ -1,17 +1,23 @@
 <template>
 	<div id="app">
 		<breakpoint-component/>
-		<router-view :scrollY="scrollY"></router-view>
+		<topic-view-component v-if="IS_GH_PAGES" :IS_GH_PAGES="IS_GH_PAGES"/>
+		<router-view v-else :scrollY="scrollY"></router-view>
 	</div>
 </template>
 
 <script>
 import BreakpointComponent from './BreakpointComponent.vue';
+import TopicViewComponent from './TopicViewComponent.vue';
 import eventBus from '../utils/event-bus';
 
 export default {
 	components: {
-		BreakpointComponent
+		BreakpointComponent,
+		TopicViewComponent
+	},
+	props: {
+		IS_GH_PAGES: { default: false }
 	},
 	data() {
 		return {
