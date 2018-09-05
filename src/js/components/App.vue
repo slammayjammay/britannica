@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<breakpoint-component/>
-		<topic-view-component v-if="IS_GH_PAGES" :IS_GH_PAGES="IS_GH_PAGES"/>
+		<topic-view-component v-if="IS_GH_PAGES" :IS_GH_PAGES="IS_GH_PAGES" :scrollY="scrollY"/>
 		<router-view v-else :scrollY="scrollY"></router-view>
 	</div>
 </template>
