@@ -2,12 +2,16 @@ import Vue from 'vue';
 import App from './js/components/App.vue';
 import createRouter from './create-router';
 
-export default (context) => {
+const IS_GH_PAGES = false;
+
+export default () => {
 	const router = createRouter();
 
 	const app = new Vue({
-		render: h => h(App),
-		router
+		router,
+		render: h => h(App, {
+			props: { IS_GH_PAGES }
+		}),
 	});
 
 	return { app, router };
