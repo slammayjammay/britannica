@@ -53,8 +53,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import '../../scss/settings';
-
 .search-modal {
 	display: none;
 	position: absolute;
