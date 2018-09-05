@@ -1,11 +1,13 @@
 <template>
 	<div class="main-content">
 		<div class="content" ref="content">
+			<definition-modal/>
+
 			<template v-if="topic">
 				<topic-block :topic="topic.intro" class="topic-block-intro">
 					<p v-if="topic.intro.writtenBy.length > 0">WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
 					<p v-if="topic.intro.lastUpdated">LAST UPDATED: {{ topic.intro.lastUpdated }}</p>
-					<p v-if="topic.intro.warning">{{ topic.intro.warning }}</p>
+					<p v-if="topic.intro.introWarning" v-html="topic.intro.introWarning.html"></p>
 				</topic-block>
 
 				<topic-block
@@ -22,7 +24,7 @@
 			</template>
 		</div>
 
-		<main-content-sidebar v-if="topic" :topic="topic"></main-content-sidebar>
+		<main-content-sidebar v-if="topic && topic.facts" :topic="topic"></main-content-sidebar>
 	</div>
 </template>
 
@@ -30,6 +32,7 @@
 import MainContentLoader from './MainContentLoader.vue';
 import MainContentSidebar from './MainContentSidebar.vue';
 import TopicBlock from './TopicBlock.vue';
+import DefinitionModal from './DefinitionModal.vue';
 import eventBus from '../utils/event-bus';
 
 export default {
@@ -37,7 +40,8 @@ export default {
 	components: {
 		MainContentLoader,
 		MainContentSidebar,
-		TopicBlock
+		TopicBlock,
+		DefinitionModal
 	},
 	mounted() {
 		this.init = this.init.bind(this);
@@ -117,9 +121,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import '../../scss/_settings.scss';
-
+<style lang="scss">
 .main-content {
 	display: flex;
 	padding-top: $header-height + 30px;
@@ -129,7 +131,12 @@ export default {
 
 	.content {
 		flex-grow: 1;
-		padding: 0 30px 30px 30px;
+		margin: 0 30px 30px 30px;
+		position: relative;
+	}
+
+	img {
+		max-width: 100%;
 	}
 }
 </style>

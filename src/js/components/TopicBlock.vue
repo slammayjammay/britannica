@@ -6,8 +6,11 @@
 
 		<slot></slot>
 
-		<div ref="paragraphs">
-			<p v-for="paragraphHTML of topic.paragraphs" v-html="paragraphHTML"></p>
+		<div>
+			<template v-for="elementData of topic.elements">
+				<div v-if="elementData.tagName === 'IMG'" v-html="elementData.html"/>
+				<p v-if="elementData.tagName === 'P'" v-html="elementData.html"/>
+			</template>
 		</div>
 
 		<topic-block
@@ -20,8 +23,10 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import DynamicHeading from './DynamicHeading.vue';
 import DeepLink from './DeepLink.vue';
+import DefinitionComponent from './DefinitionComponent.vue';
 import eventBus from '../utils/event-bus';
 
 export default {
@@ -33,6 +38,31 @@ export default {
 	components: {
 		DynamicHeading,
 		DeepLink
+	},
+	mounted() {
+		this._onBlocksFetched = this._onBlocksFetched.bind(this);
+
+		eventBus.$on('blocks-fetched', this._onBlocksFetched);
+	},
+	methods: {
+		_onBlocksFetched() {
+			this.setupDictionaryLinks();
+		},
+
+		setupDictionaryLinks() {
+			const linkEls = [].slice.call(this.$el.querySelectorAll('[data-dictionary-link-target]'));
+
+			for (let linkEl of linkEls) {
+				const DefinitionConstructor = Vue.extend(DefinitionComponent);
+				const instance = new DefinitionConstructor({
+					propsData: {
+						word: linkEl.getAttribute('data-dictionary-link-target'),
+						href: linkEl.getAttribute('href')
+					}
+				});
+				instance.$mount(linkEl);
+			}
+		}
 	}
 };
 </script>

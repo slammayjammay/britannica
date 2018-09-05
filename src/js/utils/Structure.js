@@ -36,7 +36,7 @@ class Structure {
 				id,
 				sidebarHeader,
 				header,
-				paragraphs: [],
+				elements: [],
 				sections: [],
 				isFilled: false
 			};
@@ -53,7 +53,7 @@ class Structure {
 
 	fillIntro(intro) {
 		this.intro.header = intro.header;
-		this.intro.paragraphs = intro.paragraphs;
+		this.intro.elements = intro.elements;
 		this.intro.writtenBy = intro.writtenBy;
 		this.intro.isFilled = true;
 	}
@@ -63,7 +63,7 @@ class Structure {
 			const node = this.nodeMap[section.id];
 
 			node.header = section.header;
-			node.paragraphs = section.paragraphs;
+			node.elements = section.elements;
 
 			node.isFilled = true;
 		}

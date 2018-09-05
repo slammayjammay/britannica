@@ -5,9 +5,10 @@
 				<div class="fact">
 					<span class="fact-header">{{ fact.header.toUpperCase() }}</span>
 					<div class="fact-paragraphs"></div>
-					<p v-for="paragraphHTML in fact.paragraphs"
-						v-html="paragraphHTML"
-						class="fact-paragraph needs-link-parsing"
+
+					<p v-for="elementData in fact.elements"
+						v-html="elementData.html"
+						class="fact-paragraph"
 					/>
 				</div>
 			</template>

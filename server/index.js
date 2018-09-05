@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { createRenderer, createBundleRenderer } = require('vue-server-renderer');
 const createDevServer = require('./create-dev-server');
 const BritannicaScraper = require('./BritannicaScraper');
+const MerriamWebsterScraper = require('./MerriamWebsterScraper');
 
 const server = express();
 const PORT = 8080;
@@ -44,6 +45,25 @@ server.post('/search', async (req, res) => {
 
 		res.json(data);
 	} catch (e) {
+		res.status(500).end('Internal server error.');
+		console.log(e);
+	}
+});
+
+server.post('/dictionary', async (req, res) => {
+	const word = req.body.word;
+
+	try {
+		const scraper = new MerriamWebsterScraper();
+		const { error, data } = await scraper.getDefinition(word);
+
+		if (error) {
+			console.log(error);
+			return res.end(error.message);
+		}
+
+		res.json(data);
+	} catch(e) {
 		res.status(500).end('Internal server error.');
 		console.log(e);
 	}

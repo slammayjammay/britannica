@@ -126,7 +126,7 @@ export default {
 					.then(response => response.json())
 					.then(data => {
 						this.structure.fill(data.sections);
-						this.onStructureFilled();
+						this.$nextTick(() => this.onStructureFilled());
 					});
 			}
 		}
@@ -153,8 +153,8 @@ export default {
 			this.$nextTick(() => this.onStructureFilled());
 		},
 
-		onStructureFilled() {
-			[].slice.call(this.$el.querySelectorAll('img')).forEach(image => {
+		async onStructureFilled() {
+			[].forEach.call(this.$el.querySelectorAll('img'), image => {
 				image.addEventListener('load', this._onImageLoad);
 			});
 

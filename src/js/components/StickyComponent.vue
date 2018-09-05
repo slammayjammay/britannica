@@ -2,7 +2,7 @@
 	<div class="sticky-component">
 		<div class="header-top">
 			<div class="header-top-row">
-				<div class="header-title-row">Encyclopadia Britannica</div>
+				<div class="header-title-row">Encyclopædia Britannica</div>
 				<hr />
 			</div>
 			<div class="header-menu-row">
@@ -72,10 +72,12 @@ export default {
 
 <style lang="scss" scoped>
 .sticky-component {
+	z-index: 2;
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
+	min-width: $body-min-width;
 }
 
 .sticky-inner {

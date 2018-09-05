@@ -55,6 +55,7 @@ export default {
 <style lang="scss">
 html, body {
 	margin: 0;
+	min-width: $body-min-width;
 }
 
 $sidebar-width: 300px;
@@ -75,6 +76,14 @@ $subheader-color: #f2f2f2;
 
 .main-content-width {
 	flex-grow: 1;
+}
+
+a {
+	color: $link-color;
+
+	&:hover {
+		opacity: 0.8;
+	}
 }
 
 .button-reset {
