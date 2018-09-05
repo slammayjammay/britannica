@@ -74,7 +74,7 @@ export default {
 				this.$refs.content.querySelectorAll('.topic-block:not(.topic-block-intro)')
 			);
 
-			return blocks.map(el => el.offsetTop - 146);
+			return blocks.map(el => el.offsetTop);
 		},
 
 		async _onScroll(scrollFlags) {
