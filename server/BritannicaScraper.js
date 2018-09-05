@@ -1,12 +1,13 @@
 const request = require('request');
 const querystring = require('querystring');
 const { JSDOM } = require('jsdom');
+const BaseScraper = require('./BaseScraper');
 const parseBritannicaHTMLFromElement = require('./parse-britannica-html-from-element');
 
 const BASE_URL = `https://www.britannica.com`;
 const SEARCH_URL = `${BASE_URL}/search?query=`;
 
-class BritannicaScraper {
+class BritannicaScraper extends BaseScraper {
 	async search(queryString) {
 		queryString = querystring.escape(queryString);
 
@@ -202,20 +203,6 @@ class BritannicaScraper {
 			header: isIntro ? null : sectionEl.querySelector(`h${headerLevel}`).textContent,
 			elements: elements.map(el => parseBritannicaHTMLFromElement(el))
 		};
-	}
-
-	get(url) {
-		return new Promise(resolve => {
-			request.get(url, (error, res, body) => {
-				if (error) {
-					resolve({ error });
-				} else if (res.statusCode !== 200) {
-					resolve({ error: new Error(`"${url}" responded with a status of "${res.statusCode}"`) });
-				} else {
-					resolve({ body });
-				}
-			});
-		});
 	}
 }
 

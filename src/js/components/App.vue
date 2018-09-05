@@ -78,6 +78,14 @@ $subheader-color: #f2f2f2;
 	flex-grow: 1;
 }
 
+a {
+	color: $link-color;
+
+	&:hover {
+		opacity: 0.8;
+	}
+}
+
 .button-reset {
 	background: none;
 	border: none;

@@ -1,6 +1,8 @@
 <template>
 	<div class="main-content">
 		<div class="content" ref="content">
+			<definition-modal/>
+
 			<template v-if="topic">
 				<topic-block :topic="topic.intro" class="topic-block-intro">
 					<p v-if="topic.intro.writtenBy.length > 0">WRITTEN BY: {{ topic.intro.writtenBy.join(', ') }}</p>
@@ -30,6 +32,7 @@
 import MainContentLoader from './MainContentLoader.vue';
 import MainContentSidebar from './MainContentSidebar.vue';
 import TopicBlock from './TopicBlock.vue';
+import DefinitionModal from './DefinitionModal.vue';
 import eventBus from '../utils/event-bus';
 
 export default {
@@ -37,7 +40,8 @@ export default {
 	components: {
 		MainContentLoader,
 		MainContentSidebar,
-		TopicBlock
+		TopicBlock,
+		DefinitionModal
 	},
 	mounted() {
 		this.init = this.init.bind(this);
@@ -127,7 +131,8 @@ export default {
 
 	.content {
 		flex-grow: 1;
-		padding: 0 30px 30px 30px;
+		margin: 0 30px 30px 30px;
+		position: relative;
 	}
 
 	img {

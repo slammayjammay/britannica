@@ -47,14 +47,18 @@ function parseParagraph(elToParse, dummy) {
 	}
 }
 
-function setupAnchorElement(elToParse, elToCreate) {
+function setupAnchorElement(elToParse, elToSetup) {
 	const href = elToParse.getAttribute('href').replace('https://www.britannica.com', '');
-	elToCreate.setAttribute('href', escapeHTML(href));
+	elToSetup.setAttribute('href', escapeHTML(href));
+
+	if (href.includes('https://www.merriam-webster.com/dictionary/')) {
+		elToSetup.setAttribute('data-dictionary-link-target', parseTextContent(elToParse));
+	}
 }
 
-function setupImgElement(elToParse, elToCreate) {
+function setupImgElement(elToParse, elToSetup) {
 	const src = elToParse.getAttribute('src');
-	elToCreate.setAttribute('src', escapeHTML(src));
+	elToSetup.setAttribute('src', escapeHTML(src));
 }
 
 function parseTextContent(elToParse) {
