@@ -7,8 +7,6 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/_settings.scss';
-
 .deep-link {
 	position: absolute;
 	padding-top: $header-height;

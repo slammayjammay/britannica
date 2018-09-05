@@ -87,8 +87,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/_settings.scss';
-
 .sidebar {
 	position: absolute;
 	height: 100vh;
