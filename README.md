@@ -1,12 +1,14 @@
 # Britannica <small>([gh-pages](https://slammayjammay.github.io/britannica/))</small>
 
-Scrapes https://www.britannica.com/.
-
 Features:
-- Vue + Vue router
+- Vue + Vue Router
 - Server side rendering
 - Page scraping using [jsdom](https://github.com/jsdom/jsdom)
-- A faster, simpler, ad-free encyclopedia experience
+  - Britannica for content
+  - Merriam-Webster for definitions
+- A faster, simpler, ad-free encyclopedia site
+
+Note: The GitHub Pages demo is not fully-featured -- a backend is required.
 
 ## Build
 
