@@ -60,8 +60,9 @@ export default {
 
 <style lang="scss">
 html, body {
-	margin: 0;
+	margin: auto;
 	min-width: $body-min-width;
+	max-width: $body-max-width;
 }
 
 $sidebar-width: 300px;
