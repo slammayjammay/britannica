@@ -6,7 +6,11 @@
 		<div class="main-content-header main-content-width subheader-color">
 			<button class="sidebar-open-button" ref="sidebarOpenButton">+</button>
 			<h1 v-if="topic" class="h1">{{ topic.intro.header }}</h1>
-			<div class="scroll-indicator" ref="scrollIndicator"></div>
+
+			<div class="scroll-indicator">
+				<div class="scroll-indicator-color gradient"></div>
+				<div class="scroll-indicator-color solid" ref="scrollIndicator"></div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -51,7 +55,7 @@ export default {
 	},
 	methods: {
 		_updateScrollIndicator() {
-			const widthPercentage = Math.min(1, this.scrollY / this.scrollingDistance);
+			const widthPercentage = 1 - Math.min(1, this.scrollY / this.scrollingDistance);
 
 			TweenLite.to(this.$refs.scrollIndicator, 0.25, {
 				width: `${widthPercentage * 100}%`
@@ -134,20 +138,30 @@ button {
 		.scroll-indicator {
 			$height: 3px;
 
-			background: #084465;
 			transition: background-color 0.25s;
-			width: 0%;
 			position: absolute;
 			left: 0;
 			bottom: -$height;
 			height: $height;
-		}
-	}
-}
+			width: 100%;
 
-.subheader.finished-scrolling {
-	.scroll-indicator {
-		background: #76a307;
+			.scroll-indicator-color {
+				position: absolute;
+				top: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			.gradient {
+				background: linear-gradient(90deg, #084465 0%, #76a307 100%);
+				left: 0;
+			}
+
+			.solid {
+				background: white;
+				right: 0;
+			}
+		}
 	}
 }
 
