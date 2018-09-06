@@ -62,7 +62,10 @@ export default {
 		});
 
 		this._onImageLoad = debounce(() => {
-			this.$nextTick(() => eventBus.$emit('resize'));
+			this.$nextTick(() => {
+				eventBus.$emit('resize');
+				eventBus.$emit('image-load');
+			});
 		}, 400);
 
 		if (this.IS_GH_PAGES) {
@@ -153,7 +156,10 @@ export default {
 		},
 
 		async onStructureFilled() {
-			[].forEach.call(this.$el.querySelectorAll('img'), image => {
+			const images = this.$el.querySelectorAll('img');
+			const needsToWaitForImageLoad = images !== null;
+
+			[].forEach.call(images, image => {
 				image.addEventListener('load', this._onImageLoad);
 			});
 
@@ -166,8 +172,11 @@ export default {
 					const el = document.getElementById(id);
 
 					if (el) {
-						this.needsToDeepLink = false;
-						smoothScroll(id);
+						const scrollToDeepLink = () => {
+							this.needsToDeepLink = false;
+							smoothScroll(id);
+						};
+						needsToWaitForImageLoad ? eventBus.$once('image-load', scrollToDeepLink) : scrollToDeepLink();
 					}
 				}
 			});
