@@ -2,7 +2,7 @@
 	<div class="search-query">
 		<strong class="search-title">What are you looking for?</strong>
 
-		<form class="form" action="/search" method="POST" ref="form">
+		<form class="form" action="/search" method="POST" ref="form" autocomplete="off">
 			<label for="search-query">Search query:</label>
 			<input id="search-query" class="search-input" name="search-query" type="text" ref="input"></input>
 			<input class="submit" type="submit"></input>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
 import eventBus from '../utils/event-bus';
 
 export default {
@@ -32,32 +33,49 @@ export default {
 	async mounted() {
 		this._onInputSubmit = this._onInputSubmit.bind(this);
 		this._onModalInputFocus = this._onModalInputFocus.bind(this);
+		this._onInputType = debounce(this._onInputType.bind(this), 200);
 
 		this.$refs.form.addEventListener('submit', this._onInputSubmit);
+		this.$refs.input.addEventListener('keyup', this._onInputType);
+
 		eventBus.$on('search-modal:focus-input', this._onModalInputFocus);
 	},
 	methods: {
+		_onInputType(e) {
+			const query = this.$refs.input.value;
+
+			if (query.trim() === '') {
+				return;
+			}
+
+			this.fetchSearchQuery(query).then(results => {
+				this._updateResults(query, results);
+			});
+		},
+
 		_onInputSubmit(e) {
 			e.preventDefault();
 
 			const query = this.$refs.input.value;
 
-			const fetched = fetch('/search', {
+			this.fetchSearchQuery(query).then(results => {
+				this._updateResults(query, results);
+			});
+		},
+
+		fetchSearchQuery(query) {
+			const promise = fetch('/search', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json'
 				},
-				body: JSON.stringify({
-					'search-query': query
-				})
+				body: JSON.stringify({ 'search-query': query })
 			});
 
-			fetched.then(results => {
-				results.json().then(results => this._updateResults(query, results));
-			}).catch(error => {
-				console.log(error);
-			});
+			promise.catch(error => console.log(error))
+
+			return promise.then(results => results.json());
 		},
 
 		_updateResults(query, results) {
